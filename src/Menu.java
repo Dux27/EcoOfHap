@@ -8,8 +8,8 @@ public class Menu {
 
     public Menu(UI parentUI) {
         this.parentUI = parentUI;
-        parentUI.setTitle("Economy of Happiness");        // Add window title
-        parentUI.setSize(300, 400);       // Set reasonable window size
+        parentUI.setTitle("Economy of Happiness");    
+        parentUI.setSize(300, 400);   
         setupMenuPanel();
         setupPlayerSelectPanel();
     }
@@ -17,7 +17,7 @@ public class Menu {
     private void setupMenuPanel() {
         menuPanel = new JPanel();
         menuPanel.setLayout(new BoxLayout(menuPanel, BoxLayout.Y_AXIS));
-        menuPanel.setPreferredSize(new Dimension(300, 400));  // Set panel size
+        menuPanel.setPreferredSize(new Dimension(300, 400)); 
 
         JLabel titleLabel = new JLabel("MENU");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
@@ -46,7 +46,7 @@ public class Menu {
     private void setupPlayerSelectPanel() {
         playerSelectPanel = new JPanel();
         playerSelectPanel.setLayout(new BoxLayout(playerSelectPanel, BoxLayout.Y_AXIS));
-        playerSelectPanel.setPreferredSize(new Dimension(300, 400));  // Set panel size
+        playerSelectPanel.setPreferredSize(new Dimension(300, 400));
 
         JLabel titleLabel = new JLabel("SELECT PLAYER");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
@@ -66,7 +66,7 @@ public class Menu {
 
         player1Button.addActionListener(e -> parentUI.createPlayer(28));
         player2Button.addActionListener(e -> parentUI.createPlayer(20));
-        backButton.addActionListener(e -> showMainMenu());
+        backButton.addActionListener(e -> showMenu());
 
         playerSelectPanel.add(Box.createVerticalGlue());
         playerSelectPanel.add(player1Button);
@@ -77,7 +77,7 @@ public class Menu {
         playerSelectPanel.add(Box.createVerticalGlue());
     }
 
-    public void showMainMenu() {
+    public void showMenu() {
         parentUI.getContentPane().removeAll();
         parentUI.getContentPane().add(menuPanel);
         parentUI.revalidate();

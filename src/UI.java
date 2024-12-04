@@ -7,7 +7,7 @@ public class UI extends JFrame {
     public UI() {
         setupWindow();
         menu = new Menu(this);
-        menu.showMainMenu();
+        menu.showMenu();
     }
 
     private void setupWindow() {
