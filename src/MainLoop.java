@@ -1,12 +1,12 @@
 
 public class MainLoop {
     public static boolean running = true;
+    public static int TICK_DURATION_MS = 1000;
     public static long TIC_COUNTER = 0;
-
+    
     static long previousTime = System.currentTimeMillis();
 
     private static void tick(){
-        int TICK_DURATION_MS = 100;
         long currentTime = System.currentTimeMillis();
         long elapsedTime = currentTime - previousTime;
             
