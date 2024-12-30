@@ -23,7 +23,7 @@ public class Item {
     }
     
     public void use(Player player) {
-        for(Effect effect : activeEffects) {
+        for(Effect effect : passiveEffects) {
             player.effects.add(effect);
         }
     }
