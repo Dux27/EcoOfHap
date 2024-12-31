@@ -10,8 +10,6 @@ public class Menu {
 
     public Menu(UI parentUI) {
         this.parentUI = parentUI;
-        parentUI.setTitle("Economy of Happiness");    
-        parentUI.setSize(300, 400);   
         setupMenuPanel();
         setupPlayerSelectPanel();
         setupGameDurationPanel();
