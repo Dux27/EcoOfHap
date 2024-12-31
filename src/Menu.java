@@ -18,7 +18,6 @@ public class Menu {
     private void setupMenuPanel() {
         menuPanel = new JPanel();
         menuPanel.setLayout(new BoxLayout(menuPanel, BoxLayout.Y_AXIS));
-        menuPanel.setPreferredSize(new Dimension(300, 400)); 
 
         JLabel titleLabel = new JLabel("MENU");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
@@ -47,7 +46,6 @@ public class Menu {
     private void setupPlayerSelectPanel() {
         playerSelectPanel = new JPanel();
         playerSelectPanel.setLayout(new BoxLayout(playerSelectPanel, BoxLayout.Y_AXIS));
-        playerSelectPanel.setPreferredSize(new Dimension(300, 400));
 
         JLabel titleLabel = new JLabel("SELECT PLAYER");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
@@ -87,7 +85,6 @@ public class Menu {
     private void setupGameDurationPanel() {
         gameDurationPanel = new JPanel();
         gameDurationPanel.setLayout(new BoxLayout(gameDurationPanel, BoxLayout.Y_AXIS));
-        gameDurationPanel.setPreferredSize(new Dimension(300, 400));
 
         JLabel titleLabel = new JLabel("SELECT GAME DURATION");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
