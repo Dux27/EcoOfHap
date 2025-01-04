@@ -1,8 +1,7 @@
-
 public class MainLoop {
     public static boolean running = true;
     public static int TICK_DURATION_MS = 1000;
-    public static long TIC_COUNTER = 0;
+    public static long TIC_COUNTER;
     
     static long previousTime = System.currentTimeMillis();
 

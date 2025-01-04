@@ -1,11 +1,13 @@
 import javax.swing.*;
 
 public class UI extends JFrame {
-    private Player player;
-    private Menu menu;
+    public Player player;
+    public Menu menu;
+    public Game game;
 
     public UI() {
         menu = new Menu(this);
+        game = new Game(this);
         setupWindow();
         menu.showMenu();
     }

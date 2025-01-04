@@ -106,9 +106,18 @@ public class Menu {
         longButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // 1 month in ms; average life expectancy => 75 years
-        shortButton.addActionListener(e -> MainLoop.TICK_DURATION_MS = 667); // 1 year in 8 seconds; life in 10 minutes
-        mediumButton.addActionListener(e -> MainLoop.TICK_DURATION_MS = 1000); // 1 year in 12 seconds; life in 15 minutes
-        longButton.addActionListener(e -> MainLoop.TICK_DURATION_MS = 1750); // 1 year in 21 seconds; life in 25 minutes
+        shortButton.addActionListener(e -> {
+            MainLoop.TICK_DURATION_MS = 667; // 1 year in 8 seconds; life in 10 minutes
+            parentUI.game.showMainPanel();
+        }); 
+        mediumButton.addActionListener(e -> {
+            MainLoop.TICK_DURATION_MS = 1000; // 1 year in 12 seconds; life in 15 minutes
+            parentUI.game.showMainPanel();
+        }); 
+        longButton.addActionListener(e -> {
+            MainLoop.TICK_DURATION_MS = 1750; // 1 year in 21 seconds; life in 25 minutes
+            parentUI.game.showMainPanel();
+        }); 
 
         gameDurationPanel.add(Box.createVerticalGlue());
         gameDurationPanel.add(gameDurationLabel);
