@@ -8,17 +8,17 @@ public class Player {
     public float money;
     public float health;
 
-    public String iconPath;
+    public String icon;
     private List<Effect> activeEffects;
     public Inventory inventory = new Inventory();
 
-    public Player(String name, int age, float happiness, float money, float health, String iconPath) {
+    public Player(String name, int age, float happiness, float money, float health, String icon) {
         this.name = name;
         this.age = age;
         this.happiness = happiness;
         this.money = money;
         this.health = health;
-        this.iconPath = iconPath;
+        this.icon = icon;
     }
 
     public void addEffect(Effect effect) {

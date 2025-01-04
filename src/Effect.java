@@ -1,4 +1,4 @@
-class Effect {
+public class Effect {
     private final String name;
     private final int happinessImpact;
     private final int moneyImpact;

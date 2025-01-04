@@ -7,6 +7,7 @@ public class Menu {
     private JPanel gameDurationPanel;
 
     private final UI parentUI;
+    public Player player;
 
     public Menu(UI parentUI) {
         this.parentUI = parentUI;
@@ -64,11 +65,11 @@ public class Menu {
         backButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         player1Button.addActionListener(e -> {
-            parentUI.createPlayer(18);
+            player = new Player("Player", 18, 100, 1000, 100, "default_icon.png");
             showGameDuration();
         });
         player2Button.addActionListener(e -> {
-            parentUI.createPlayer(27);
+            player = new Player("Player", 27, 100, 1000, 100, "default_icon.png");
             showGameDuration();
         });
         backButton.addActionListener(e -> showMenu());
@@ -108,15 +109,15 @@ public class Menu {
         // 1 month in ms; average life expectancy => 75 years
         shortButton.addActionListener(e -> {
             MainLoop.TICK_DURATION_MS = 667; // 1 year in 8 seconds; life in 10 minutes
-            parentUI.game.showMainPanel();
+            parentUI.activateGame();
         }); 
         mediumButton.addActionListener(e -> {
             MainLoop.TICK_DURATION_MS = 1000; // 1 year in 12 seconds; life in 15 minutes
-            parentUI.game.showMainPanel();
+            parentUI.activateGame();
         }); 
         longButton.addActionListener(e -> {
             MainLoop.TICK_DURATION_MS = 1750; // 1 year in 21 seconds; life in 25 minutes
-            parentUI.game.showMainPanel();
+            parentUI.activateGame();
         }); 
 
         gameDurationPanel.add(Box.createVerticalGlue());

@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Item {
-    private String name;
+    private final String name;
     private final float price;
     private List<Effect> activeEffects;
 

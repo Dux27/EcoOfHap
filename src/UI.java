@@ -18,12 +18,18 @@ public class UI extends JFrame {
         setSize(450, 550);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        ImageIcon icon = new ImageIcon(Toolkit.getDefaultToolkit().getImage("assets/game_icon.png"));
-        Image image = icon.getImage().getScaledInstance(64, 64, Image.SCALE_SMOOTH);
-        setIconImage(image);
+        ImageIcon mainIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage("assets/game_icon.png"));
+        Image mainImage = mainIcon.getImage().getScaledInstance(64, 64, Image.SCALE_SMOOTH);
+        setIconImage(mainImage);
     }
 
-    public void createPlayer(int age) {
-        player = new Player("Player", age, 100, 1000, 100, "default_icon.png");
+    public void activateGame() {
+        game.showGame();
+        MainLoop.startGame();
+    }
+
+    public void activateMenu() {
+        menu.showMenu();
+        MainLoop.stopGame();
     }
 }
