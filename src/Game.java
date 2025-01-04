@@ -18,20 +18,20 @@ public class Game {
         JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
 
-        ImageIcon leftIcon = new ImageIcon("assets/left_icon.png");
-        ImageIcon rightIcon = new ImageIcon("assets/right_icon.png");
+        ImageIcon houseIcon = new ImageIcon("assets/house_button.png");
+        ImageIcon shopIcon = new ImageIcon("assets/shop_button.png");
 
-        Image scaledLeftImage = leftIcon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
-        Image scaledRightImage = rightIcon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+        Image scaledHouseImage = houseIcon.getImage().getScaledInstance(65, 65, Image.SCALE_SMOOTH);
+        Image scaledShopImage = shopIcon.getImage().getScaledInstance(65, 65, Image.SCALE_SMOOTH);
 
-        JButton leftButton = new JButton(new ImageIcon(scaledLeftImage));
-        JButton rightButton = new JButton(new ImageIcon(scaledRightImage));
+        JButton houseButton = new JButton(new ImageIcon(scaledHouseImage));
+        JButton shopButton = new JButton(new ImageIcon(scaledShopImage));
 
-        leftButton.setPreferredSize(new Dimension(50, 50));
-        rightButton.setPreferredSize(new Dimension(50, 50));
+        houseButton.setPreferredSize(new Dimension(65, 65));
+        shopButton.setPreferredSize(new Dimension(65, 65));
 
-        leftPanel.add(leftButton);
-        rightPanel.add(rightButton);
+        leftPanel.add(houseButton);
+        rightPanel.add(shopButton);
 
         mainPanel.add(leftPanel, BorderLayout.WEST);
         mainPanel.add(rightPanel, BorderLayout.EAST);
