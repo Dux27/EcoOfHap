@@ -16,6 +16,7 @@ public class MainLoop {
     
     }
     
+    @SuppressWarnings("UnusedAssignment")
     public static void main(String[] args) {
         UI ui = new UI();
         ui.setVisible(true);
@@ -23,10 +24,12 @@ public class MainLoop {
         boolean printed = false;
         while (running) {
             tick();
-            if (TIC_COUNTER % 10 == 0 && !printed) {
-                System.console().printf("Tic: %d\n", TIC_COUNTER);
+            if (TIC_COUNTER % 12 == 0 && !printed) {
+                int month = 0;
+                System.console().printf("Month: %d\n", month);
+                month += 1;
                 printed = true;
-            } else if (TIC_COUNTER % 10 != 0) {
+            } else if (TIC_COUNTER % 12 != 0) {
                 printed = false;
             }
         }
