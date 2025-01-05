@@ -28,17 +28,29 @@ public class Menu {
         menuPanel.add(titleLabel);
         menuPanel.add(Box.createRigidArea(new Dimension(0, 40)));
 
-        JButton playButton = new JButton("Play");
+        JButton newGameButton = new JButton("New Game");
+        JButton continueButton = new JButton("Continue");
         JButton quitButton = new JButton("Quit");
 
-        playButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        newGameButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        continueButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         quitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        playButton.addActionListener(e -> showPlayerSelect());
+        newGameButton.setFocusable(false);
+        continueButton.setFocusable(false);
+        quitButton.setFocusable(false);
+
+        newGameButton.addActionListener(e -> showPlayerSelect());
+        continueButton.addActionListener(e -> {
+            if (parentUI.continueGame)
+                parentUI.activateGame();
+        });
         quitButton.addActionListener(e -> System.exit(0));
 
         menuPanel.add(Box.createVerticalGlue());
-        menuPanel.add(playButton);
+        menuPanel.add(newGameButton);
+        menuPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+        menuPanel.add(continueButton);
         menuPanel.add(Box.createRigidArea(new Dimension(0, 20)));
         menuPanel.add(quitButton);
         menuPanel.add(Box.createVerticalGlue());
@@ -108,14 +120,17 @@ public class Menu {
 
         // 1 month in ms; average life expectancy => 75 years
         shortButton.addActionListener(e -> {
+            MainLoop.TIC_COUNTER = 0;
             MainLoop.TICK_DURATION_MS = 667; // 1 year in 8 seconds; life in 10 minutes
             parentUI.activateGame();
         }); 
         mediumButton.addActionListener(e -> {
+            MainLoop.TIC_COUNTER = 0;
             MainLoop.TICK_DURATION_MS = 1000; // 1 year in 12 seconds; life in 15 minutes
             parentUI.activateGame();
         }); 
         longButton.addActionListener(e -> {
+            MainLoop.TIC_COUNTER = 0;
             MainLoop.TICK_DURATION_MS = 1750; // 1 year in 21 seconds; life in 25 minutes
             parentUI.activateGame();
         }); 

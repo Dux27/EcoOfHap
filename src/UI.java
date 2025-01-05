@@ -6,6 +6,8 @@ public class UI extends JFrame {
     public Menu menu;
     public Game game;
 
+    public boolean continueGame;
+
     public UI() {
         menu = new Menu(this);
         game = new Game(this);
@@ -15,15 +17,17 @@ public class UI extends JFrame {
 
     private void setupWindow() {
         setTitle("Economy of Happiness");
-        setSize(450, 550);
+        setSize(500, 550);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         ImageIcon mainIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage("assets/game_icon.png"));
         Image mainImage = mainIcon.getImage().getScaledInstance(64, 64, Image.SCALE_SMOOTH);
         setIconImage(mainImage);
+        setResizable(false);
     }
 
     public void activateGame() {
+        continueGame = true;
         game.showGame();
         MainLoop.startGame();
     }

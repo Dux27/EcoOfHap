@@ -22,14 +22,14 @@ public class MainLoop {
             while (running) {
                 tick();
                 // DEBUGING: Print every month
-                if (TIC_COUNTER % 12 == 0 && !printed && TIC_COUNTER != 0) {
+                if (TIC_COUNTER % 2 == 0 && !printed && TIC_COUNTER != 0) {
                     System.out.println("TICK: " + TIC_COUNTER);
                     printed = true;
-                } else if (TIC_COUNTER % 12 != 0) {
+                } else if (TIC_COUNTER % 2 != 0) {
                     printed = false;
                 }
             }
-        }).start();
+        }).start();                             
     }
 
     public static void stopGame() {
