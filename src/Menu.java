@@ -58,23 +58,35 @@ public class Menu {
 
     private void setupPlayerSelectPanel() {
         playerSelectPanel = new JPanel();
-        playerSelectPanel.setLayout(new BoxLayout(playerSelectPanel, BoxLayout.Y_AXIS));
+        playerSelectPanel.setLayout(new BorderLayout());
+
+        JPanel upperPanel = new JPanel(new BorderLayout());
+        JPanel lowerPanel = new JPanel();
+        lowerPanel.setLayout(new BoxLayout(lowerPanel, BoxLayout.Y_AXIS));
+
+        ImageIcon backIcon = new ImageIcon("assets/menu_button.png");
+        Image scaledBackImage = backIcon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
+    
+        JButton backButton = new JButton(new ImageIcon(scaledBackImage));
+
+        backButton.setPreferredSize(new Dimension(40, 40));
+        backButton.setToolTipText("Go back");
+        backButton.addActionListener(e -> showMenu());
+        upperPanel.add(backButton, BorderLayout.WEST);
 
         JLabel titleLabel = new JLabel("SELECT PLAYER");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        playerSelectPanel.add(Box.createVerticalGlue());
-        playerSelectPanel.add(titleLabel);
-        playerSelectPanel.add(Box.createRigidArea(new Dimension(0, 40)));
+        lowerPanel.add(Box.createVerticalGlue());
+        lowerPanel.add(titleLabel);
+        lowerPanel.add(Box.createRigidArea(new Dimension(0, 40)));
 
         JButton player1Button = new JButton("Player 1 (Age: 18)");
         JButton player2Button = new JButton("Player 2 (Age: 27)");
-        JButton backButton = new JButton("Back");
 
         player1Button.setAlignmentX(Component.CENTER_ALIGNMENT);
         player2Button.setAlignmentX(Component.CENTER_ALIGNMENT);
-        backButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         player1Button.addActionListener(e -> {
             player = new Player("Player", 18, 100, 1000, 100, "default_icon.png");
@@ -84,33 +96,47 @@ public class Menu {
             player = new Player("Player", 27, 100, 1000, 100, "default_icon.png");
             showGameDuration();
         });
-        backButton.addActionListener(e -> showMenu());
 
-        playerSelectPanel.add(Box.createVerticalGlue());
-        playerSelectPanel.add(player1Button);
-        playerSelectPanel.add(Box.createRigidArea(new Dimension(0, 20)));
-        playerSelectPanel.add(player2Button);
-        playerSelectPanel.add(Box.createRigidArea(new Dimension(0, 20)));
-        playerSelectPanel.add(backButton);
-        playerSelectPanel.add(Box.createVerticalGlue());
+        Box buttonBox = Box.createHorizontalBox();
+        buttonBox.add(player1Button);
+        buttonBox.add(Box.createRigidArea(new Dimension(20, 0)));
+        buttonBox.add(player2Button);
+
+        lowerPanel.add(Box.createVerticalGlue());
+        lowerPanel.add(buttonBox);
+        lowerPanel.add(Box.createVerticalGlue());
+
+        playerSelectPanel.add(upperPanel, BorderLayout.NORTH);
+        playerSelectPanel.add(lowerPanel, BorderLayout.CENTER);
     }
 
     private void setupGameDurationPanel() {
         gameDurationPanel = new JPanel();
-        gameDurationPanel.setLayout(new BoxLayout(gameDurationPanel, BoxLayout.Y_AXIS));
+        gameDurationPanel.setLayout(new BorderLayout());
+
+        JPanel upperPanel = new JPanel(new BorderLayout());
+        JPanel lowerPanel = new JPanel();
+        lowerPanel.setLayout(new BoxLayout(lowerPanel, BoxLayout.Y_AXIS));
+
+        ImageIcon backIcon = new ImageIcon("assets/menu_button.png");
+        Image scaledBackImage = backIcon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
+    
+        JButton backButton = new JButton(new ImageIcon(scaledBackImage));
+
+        backButton.setPreferredSize(new Dimension(40, 40));
+        backButton.setToolTipText("Go back");
+        backButton.addActionListener(e -> showPlayerSelect());
+        upperPanel.add(backButton, BorderLayout.WEST);
 
         JLabel titleLabel = new JLabel("SELECT GAME DURATION");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        gameDurationPanel.add(Box.createVerticalGlue());
-        gameDurationPanel.add(titleLabel);
-        gameDurationPanel.add(Box.createRigidArea(new Dimension(0, 40)));
+        lowerPanel.add(Box.createVerticalGlue());
+        lowerPanel.add(titleLabel);
+        lowerPanel.add(Box.createRigidArea(new Dimension(0, 40)));
 
-        JLabel gameDurationLabel = new JLabel("Game Duration");
-        gameDurationLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        gameDurationLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        JButton shortButton = new JButton("Blitz");
+        JButton shortButton = new JButton("Short");
         JButton mediumButton = new JButton("Normal");
         JButton longButton = new JButton("Long");
 
@@ -135,15 +161,19 @@ public class Menu {
             parentUI.activateGame();
         }); 
 
-        gameDurationPanel.add(Box.createVerticalGlue());
-        gameDurationPanel.add(gameDurationLabel);
-        gameDurationPanel.add(Box.createRigidArea(new Dimension(0, 20)));
-        gameDurationPanel.add(shortButton);
-        gameDurationPanel.add(Box.createRigidArea(new Dimension(0, 20)));
-        gameDurationPanel.add(mediumButton);
-        gameDurationPanel.add(Box.createRigidArea(new Dimension(0, 20)));
-        gameDurationPanel.add(longButton);
-        gameDurationPanel.add(Box.createVerticalGlue());
+        Box buttonBox = Box.createHorizontalBox();
+        buttonBox.add(shortButton);
+        buttonBox.add(Box.createRigidArea(new Dimension(20, 0)));
+        buttonBox.add(mediumButton);
+        buttonBox.add(Box.createRigidArea(new Dimension(20, 0)));
+        buttonBox.add(longButton);
+
+        lowerPanel.add(Box.createVerticalGlue());
+        lowerPanel.add(buttonBox);
+        lowerPanel.add(Box.createVerticalGlue());
+
+        gameDurationPanel.add(upperPanel, BorderLayout.NORTH);
+        gameDurationPanel.add(lowerPanel, BorderLayout.CENTER);
     }
     
     public void showMenu() {

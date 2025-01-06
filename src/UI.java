@@ -20,10 +20,12 @@ public class UI extends JFrame {
         setSize(500, 550);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        ImageIcon mainIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage("assets/game_icon.png"));
-        Image mainImage = mainIcon.getImage().getScaledInstance(64, 64, Image.SCALE_SMOOTH);
-        setIconImage(mainImage);
         setResizable(false);
+
+        ImageIcon mainIcon = new ImageIcon(Toolkit.getDefaultToolkit().getImage("assets/game_icon.png"));
+        Image mainImage = mainIcon.getImage().getScaledInstance(64, 64, 
+        Image.SCALE_SMOOTH);
+        setIconImage(mainImage);
     }
 
     public void activateGame() {
