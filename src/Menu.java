@@ -121,7 +121,7 @@ public class Menu {
 
         ImageIcon backIcon = new ImageIcon("assets/menu_button.png");
         Image scaledBackImage = backIcon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
-    
+
         JButton backButton = new JButton(new ImageIcon(scaledBackImage));
 
         backButton.setPreferredSize(new Dimension(40, 40));
@@ -146,21 +146,9 @@ public class Menu {
         longButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // 1 month in ms; average life expectancy => 75 years
-        shortButton.addActionListener(e -> {
-            MainLoop.TIC_COUNTER = 0;
-            MainLoop.TICK_DURATION_MS = 667; // 1 year in 8 seconds; life in 10 minutes
-            parentUI.activateGame();
-        }); 
-        mediumButton.addActionListener(e -> {
-            MainLoop.TIC_COUNTER = 0;
-            MainLoop.TICK_DURATION_MS = 1000; // 1 year in 12 seconds; life in 15 minutes
-            parentUI.activateGame();
-        }); 
-        longButton.addActionListener(e -> {
-            MainLoop.TIC_COUNTER = 0;
-            MainLoop.TICK_DURATION_MS = 1750; // 1 year in 21 seconds; life in 25 minutes
-            parentUI.activateGame();
-        }); 
+        shortButton.addActionListener(e -> selectGameDuration(667)); // 1 year in 8 seconds; life in 10 minutes 
+        mediumButton.addActionListener(e -> selectGameDuration(1000)); // 1 year in 12 seconds; life in 15 minutes 
+        longButton.addActionListener(e -> selectGameDuration(1750)); // 1 year in 21 seconds; life in 25 minutes
 
         Box buttonBox = Box.createHorizontalBox();
         buttonBox.add(shortButton);
@@ -175,6 +163,13 @@ public class Menu {
 
         gameDurationPanel.add(upperPanel, BorderLayout.NORTH);
         gameDurationPanel.add(lowerPanel, BorderLayout.CENTER);
+    }
+    
+    public void selectGameDuration(int tick_duration){
+        MainLoop.TIC_COUNTER = 0;
+        MainLoop.TICK_DURATION_MS = tick_duration;
+        System.out.println("TICK DURATION: " + MainLoop.TICK_DURATION_MS + " ms"); // DEBUG
+        parentUI.activateGame();
     }
     
     public void showMenu() {

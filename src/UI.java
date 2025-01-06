@@ -10,9 +10,9 @@ public class UI extends JFrame {
 
     public UI() {
         menu = new Menu(this);
-        game = new Game(this);
         setupWindow();
         menu.showMenu();
+        //  Game is being initialized in createPlayer method
     }
 
     private void setupWindow() {
@@ -41,6 +41,13 @@ public class UI extends JFrame {
 
     public void createPlayer(int age, String icon) {
         player = new Player("Player", age, 100, 1000, 100, icon);
+        System.out.println(
+                "PLAYER CREATED \nname = " + player.name +
+                "\nAge = " + player.age +
+                "\nIcon path = " + player.icon
+                ); // DEBUG
+        
+        game = new Game(this); // Initialize game after player is created
     }
 
 }

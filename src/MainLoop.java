@@ -21,7 +21,7 @@ public class MainLoop {
             boolean printed = false;
             while (running) {
                 tick();
-                // DEBUGING: Print every month
+                // DEBUG
                 if (TIC_COUNTER % 2 == 0 && !printed && TIC_COUNTER != 0) {
                     System.out.println("TICK: " + TIC_COUNTER);
                     printed = true;
