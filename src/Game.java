@@ -1,4 +1,8 @@
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 public class Game {
@@ -63,7 +67,7 @@ public class Game {
         happinessBar.setAlignmentX(Component.CENTER_ALIGNMENT);
         happinessBar.setMaximumSize(new Dimension(350, 40)); 
 
-        JPanel earningsSpendingBar = createEarningsSpendingBar(50, 30); // Example values
+        JPanel earningsSpendingBar = createEarningsSpendingBar(50, 30);
         earningsSpendingBar.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         centerPanel.add(Box.createVerticalGlue());
@@ -149,23 +153,58 @@ public class Game {
     }
 
     private JPanel createEarningsSpendingBar(int earnings, int spending) {
-        JPanel barPanel = new JPanel();
-        barPanel.setLayout(new BoxLayout(barPanel, BoxLayout.X_AXIS));
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0)) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2d = (Graphics2D) g;
 
-        JProgressBar earningsBar = new JProgressBar(0, 100);
-        earningsBar.setValue(earnings);
-        earningsBar.setForeground(Color.GREEN);
-        earningsBar.setStringPainted(true);
+                // Rectangle for the outline
+                g2d.setColor(Color.BLACK);
+                g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
 
-        JProgressBar spendingBar = new JProgressBar(0, 100);
-        spendingBar.setValue(spending);
-        spendingBar.setForeground(Color.RED);
-        spendingBar.setStringPainted(true);
+                // Load custom pattern images
+                BufferedImage earningsPatternImage = null;
+                BufferedImage spendingPatternImage = null;
+                try {
+                    earningsPatternImage = ImageIO.read(new File("assets/patterns/green_pattern_1.jpg"));
+                    spendingPatternImage = ImageIO.read(new File("assets/patterns/red_pattern_1.jpg"));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
-        barPanel.add(earningsBar);
-        barPanel.add(Box.createRigidArea(new Dimension(10, 0)));
-        barPanel.add(spendingBar);
+                if (earningsPatternImage != null && spendingPatternImage != null) {
+                    // Further scale down the pattern images to make the patterns appear larger
+                    BufferedImage scaledEarningsPattern = new BufferedImage(earningsPatternImage.getWidth() / 4, earningsPatternImage.getHeight() / 4, BufferedImage.TYPE_INT_ARGB);
+                    Graphics2D gEarnings = scaledEarningsPattern.createGraphics();
+                    gEarnings.drawImage(earningsPatternImage, 0, 0, scaledEarningsPattern.getWidth(), scaledEarningsPattern.getHeight(), null);
+                    gEarnings.dispose();
 
-        return barPanel;
+                    BufferedImage scaledSpendingPattern = new BufferedImage(spendingPatternImage.getWidth() / 4, spendingPatternImage.getHeight() / 4, BufferedImage.TYPE_INT_ARGB);
+                    Graphics2D gSpending = scaledSpendingPattern.createGraphics();
+                    gSpending.drawImage(spendingPatternImage, 0, 0, scaledSpendingPattern.getWidth(), scaledSpendingPattern.getHeight(), null);
+                    gSpending.dispose();
+
+                    TexturePaint earningsPaint = new TexturePaint(scaledEarningsPattern, new Rectangle(0, 0, scaledEarningsPattern.getWidth(), scaledEarningsPattern.getHeight()));
+                    TexturePaint spendingPaint = new TexturePaint(scaledSpendingPattern, new Rectangle(0, 0, scaledSpendingPattern.getWidth(), scaledSpendingPattern.getHeight()));
+
+                    // Rectangles for earnings and spending
+                    int total = earnings + spending;
+                    int earningsWidth = (int) ((earnings / (double) total) * getWidth());
+                    int spendingWidth = getWidth() - earningsWidth;
+
+                    g2d.setPaint(earningsPaint);
+                    g2d.fillRoundRect(3, 3, earningsWidth - 3, getHeight() - 6, 20, 20); 
+                    g2d.fillRect(earningsWidth - 20, 3, 20, getHeight() - 6);
+                    
+                    g2d.setPaint(spendingPaint);
+                    g2d.fillRoundRect(earningsWidth, 3, spendingWidth - 3, getHeight() - 6, 20, 20); 
+                    g2d.fillRect(earningsWidth, 3, 20, getHeight() - 6); 
+                }
+            }
+        };
+        panel.setPreferredSize(new Dimension(300, 40)); // Adjusted size
+        panel.setMaximumSize(new Dimension(300, 40)); // Ensure it doesn't stretch
+        return panel;
     }
 }

@@ -6,6 +6,8 @@ public class Player {
     public int age;
     public float happiness;
     public float money;
+    public float earnings;
+    public float spending;
     public float health;
 
     public String icon;
@@ -17,6 +19,8 @@ public class Player {
         this.age = age;
         this.happiness = happiness;
         this.money = money;
+        this.earnings = 0;
+        this.spending = 0;
         this.health = health;
         this.icon = icon;
     }
