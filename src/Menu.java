@@ -7,7 +7,6 @@ public class Menu {
     private JPanel gameDurationPanel;
 
     private final UI parentUI;
-    public Player player;
 
     public Menu(UI parentUI) {
         this.parentUI = parentUI;
@@ -44,6 +43,8 @@ public class Menu {
         continueButton.addActionListener(e -> {
             if (parentUI.continueGame)
                 parentUI.activateGame();
+            else
+                continueButton.setToolTipText("No saved game found");
         });
         quitButton.addActionListener(e -> System.exit(0));
 
@@ -89,11 +90,11 @@ public class Menu {
         player2Button.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         player1Button.addActionListener(e -> {
-            player = new Player("Player", 18, 100, 1000, 100, "default_icon.png");
+            parentUI.createPlayer(18, "assets/player1_icon.png");
             showGameDuration();
         });
         player2Button.addActionListener(e -> {
-            player = new Player("Player", 27, 100, 1000, 100, "default_icon.png");
+            parentUI.createPlayer(27, "assets/player2_icon.png");
             showGameDuration();
         });
 

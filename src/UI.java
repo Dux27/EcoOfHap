@@ -38,4 +38,9 @@ public class UI extends JFrame {
         menu.showMenu();
         MainLoop.stopGame();
     }
+
+    public void createPlayer(int age, String icon) {
+        player = new Player("Player", age, 100, 1000, 100, icon);
+    }
+
 }

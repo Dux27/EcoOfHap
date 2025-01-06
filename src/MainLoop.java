@@ -1,7 +1,7 @@
 public class MainLoop {
-    public static boolean running = false;
-    public static int TICK_DURATION_MS = 1000;
-    public static long TIC_COUNTER = 0;
+    public static boolean running = false; // Game loop running status
+    public static int TICK_DURATION_MS = 1000; 
+    public static long TIC_COUNTER = 0; 
     
     static long previousTime = System.currentTimeMillis();
 
@@ -10,7 +10,7 @@ public class MainLoop {
         long elapsedTime = currentTime - previousTime;
             
         if (elapsedTime >= TICK_DURATION_MS) {
-            previousTime = currentTime; // Reset the timer
+            previousTime = currentTime; 
             TIC_COUNTER++;
         }
     }
