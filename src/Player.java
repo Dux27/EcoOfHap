@@ -32,7 +32,7 @@ public class Player {
             effect.applyEffect(this, tickCounter); // Wpływ efektu na gracza co określoną liczbę tików
             effect.reduceTicks();                 // Redukcja czasu trwania
             if (effect.isExpired()) {
-                System.out.println("Effect expired: " + effect.getName());
+                System.out.println("Effect expired: " + effect.name);
                 iterator.remove();                // Usunięcie efektu po wygaśnięciu
             }
         }

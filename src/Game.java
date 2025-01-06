@@ -15,27 +15,6 @@ public class Game {
         setupShopPanel();
     }
 
-    private JPanel createEarningsSpendingBar(int earnings, int spending) {
-        JPanel barPanel = new JPanel();
-        barPanel.setLayout(new BoxLayout(barPanel, BoxLayout.X_AXIS));
-
-        JProgressBar earningsBar = new JProgressBar(0, 100);
-        earningsBar.setValue(earnings);
-        earningsBar.setForeground(Color.GREEN);
-        earningsBar.setStringPainted(true);
-
-        JProgressBar spendingBar = new JProgressBar(0, 100);
-        spendingBar.setValue(spending);
-        spendingBar.setForeground(Color.RED);
-        spendingBar.setStringPainted(true);
-
-        barPanel.add(earningsBar);
-        barPanel.add(Box.createRigidArea(new Dimension(10, 0)));
-        barPanel.add(spendingBar);
-
-        return barPanel;
-    }
-
     private void setupGamePanel() {
         mainPanel = new JPanel(new BorderLayout());
 
@@ -167,5 +146,26 @@ public class Game {
         parentUI.getContentPane().add(shopPanel);
         parentUI.revalidate();
         parentUI.repaint();
+    }
+
+    private JPanel createEarningsSpendingBar(int earnings, int spending) {
+        JPanel barPanel = new JPanel();
+        barPanel.setLayout(new BoxLayout(barPanel, BoxLayout.X_AXIS));
+
+        JProgressBar earningsBar = new JProgressBar(0, 100);
+        earningsBar.setValue(earnings);
+        earningsBar.setForeground(Color.GREEN);
+        earningsBar.setStringPainted(true);
+
+        JProgressBar spendingBar = new JProgressBar(0, 100);
+        spendingBar.setValue(spending);
+        spendingBar.setForeground(Color.RED);
+        spendingBar.setStringPainted(true);
+
+        barPanel.add(earningsBar);
+        barPanel.add(Box.createRigidArea(new Dimension(10, 0)));
+        barPanel.add(spendingBar);
+
+        return barPanel;
     }
 }
