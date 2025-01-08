@@ -18,36 +18,28 @@ public class Game {
     private void setupGamePanel() {
         mainPanel = new JPanel(new BorderLayout());
 
-        JPanel upperPanel = new JPanel(new BorderLayout());
-        JPanel centerPanel = new JPanel();
-        centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
-        JPanel bottomPanel = new JPanel(new BorderLayout());
+        JPanel upperMaiPanel = new JPanel(new BorderLayout());
+        JPanel centerMainPanel = new JPanel();
+        centerMainPanel.setLayout(new BoxLayout(centerMainPanel, BoxLayout.Y_AXIS));
+        JPanel bottomMainPanel = Widgets.bottomPanel(
+            e -> parentUI.activateMenu(), 
+            e -> showHelp()
+        );
 
         ImageIcon houseIcon = new ImageIcon("assets/house_button.png");
         ImageIcon shopIcon = new ImageIcon("assets/shop_button.png");
-        ImageIcon menuIcon = new ImageIcon("assets/menu_button.png");
-        ImageIcon helpIcon = new ImageIcon("assets/help_button.png");
 
         Image scaledHouseImage = houseIcon.getImage().getScaledInstance(65, 65, Image.SCALE_SMOOTH);
         Image scaledShopImage = shopIcon.getImage().getScaledInstance(65, 65, Image.SCALE_SMOOTH);
-        Image scaledMenuImage = menuIcon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
-        Image scaledHelpImage = helpIcon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
 
         JButton houseButton = new JButton(new ImageIcon(scaledHouseImage));
         JButton shopButton = new JButton(new ImageIcon(scaledShopImage));
-        JButton menuButton = new JButton(new ImageIcon(scaledMenuImage));
-        JButton helpButton = new JButton(new ImageIcon(scaledHelpImage));
 
         houseButton.setPreferredSize(new Dimension(65, 65));
         shopButton.setPreferredSize(new Dimension(65, 65));
-        menuButton.setPreferredSize(new Dimension(50, 50));
-        helpButton.setPreferredSize(new Dimension(50, 50));
 
-        upperPanel.add(houseButton, BorderLayout.WEST);
-        upperPanel.add(shopButton, BorderLayout.EAST);
-
-        bottomPanel.add(menuButton, BorderLayout.WEST);
-        bottomPanel.add(helpButton, BorderLayout.EAST);
+        upperMaiPanel.add(houseButton, BorderLayout.WEST);
+        upperMaiPanel.add(shopButton, BorderLayout.EAST);
 
         String iconPath = parentUI.player != null ? parentUI.player.icon : "assets/game_icon.png";
         JLabel avatarLabel = new JLabel(new ImageIcon(iconPath));
@@ -57,28 +49,27 @@ public class Game {
         ageLabel.setFont(new Font("Arial", Font.BOLD, 16));
         ageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JPanel moneyBar = Widgets.createBar(50, 30, "green", "red");
+        JPanel moneyBar = Widgets.barPanel(40, 30, "green", "red");
         moneyBar.setAlignmentX(Component.CENTER_ALIGNMENT);
-        JPanel happinessBar = Widgets.createBar(50, 30, "yellow", "grey");
+        JPanel happinessBar = Widgets.barPanel(20, 80, "yellow", "grey");
         happinessBar.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        centerPanel.add(Box.createVerticalGlue());
-        centerPanel.add(avatarLabel);
-        centerPanel.add(Box.createRigidArea(new Dimension(0, 20)));
-        centerPanel.add(ageLabel);
-        centerPanel.add(Box.createRigidArea(new Dimension(0, 20)));
-        centerPanel.add(moneyBar);
-        centerPanel.add(Box.createRigidArea(new Dimension(0, 20)));
-        centerPanel.add(happinessBar);
-        centerPanel.add(Box.createVerticalGlue());
+        centerMainPanel.add(Box.createVerticalGlue());
+        centerMainPanel.add(avatarLabel);
+        centerMainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+        centerMainPanel.add(ageLabel);
+        centerMainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+        centerMainPanel.add(moneyBar);
+        centerMainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+        centerMainPanel.add(happinessBar);
+        centerMainPanel.add(Box.createVerticalGlue());
 
-        mainPanel.add(upperPanel, BorderLayout.NORTH);
-        mainPanel.add(centerPanel, BorderLayout.CENTER);
-        mainPanel.add(bottomPanel, BorderLayout.SOUTH);
+        mainPanel.add(upperMaiPanel, BorderLayout.NORTH);
+        mainPanel.add(centerMainPanel, BorderLayout.CENTER);
+        mainPanel.add(bottomMainPanel, BorderLayout.SOUTH);
 
         houseButton.addActionListener(e -> showHouse());
         shopButton.addActionListener(e -> showShop());
-        menuButton.addActionListener(e -> parentUI.activateMenu());
     }
 
     private void setupHousePanel() {
@@ -103,24 +94,23 @@ public class Game {
     }
 
     private void setupShopPanel() {
-        shopPanel = new JPanel();
-        shopPanel.setLayout(new BoxLayout(shopPanel, BoxLayout.Y_AXIS));
+        shopPanel = new JPanel(new BorderLayout());
 
-        JLabel titleLabel = new JLabel("SHOP");
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        JPanel upperShopPanel = new JPanel(new BorderLayout());
+        JPanel categoryShopPanel = new JPanel();
+        categoryShopPanel.setLayout(new BoxLayout(categoryShopPanel, BoxLayout.Y_AXIS));
+        JPanel itemsShopPanel = new JPanel();
+        itemsShopPanel.setLayout(new BoxLayout(itemsShopPanel, BoxLayout.Y_AXIS));
+        JPanel bottomShopPanel = Widgets.bottomPanel(
+            e -> showGame(), 
+            e -> showHelp()
+        );
 
-        shopPanel.add(Box.createVerticalGlue());
-        shopPanel.add(titleLabel);
-        shopPanel.add(Box.createRigidArea(new Dimension(0, 40)));
-
-        JButton backButton = new JButton("Back");
-        backButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        backButton.addActionListener(e -> showGame());
-
-        shopPanel.add(Box.createVerticalGlue());
-        shopPanel.add(backButton);
-        shopPanel.add(Box.createVerticalGlue());
+        // MAIN PANEL 
+        shopPanel.add(upperShopPanel, BorderLayout.NORTH);
+        shopPanel.add(categoryShopPanel, BorderLayout.WEST);
+        shopPanel.add(itemsShopPanel, BorderLayout.CENTER);
+        shopPanel.add(bottomShopPanel, BorderLayout.SOUTH);
     }
 
     public void showGame() {
@@ -144,4 +134,7 @@ public class Game {
         parentUI.repaint();
     }
 
+    public void showHelp() {
+        // Help functionality
+    }
 }

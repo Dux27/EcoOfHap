@@ -1,16 +1,42 @@
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.function.Consumer;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
 public class Widgets {
 
-    public static JPanel createBar(int positive, int negative, String positivePattern, String negativePattern) {
+    public static JPanel bottomPanel(Consumer<ActionEvent> backAction, Consumer<ActionEvent> helpAction) { 
+        JPanel bottomPanel = new JPanel(new BorderLayout());
+
+        ImageIcon backIcon = new ImageIcon("assets/menu_button.png");
+        ImageIcon helpIcon = new ImageIcon("assets/help_button.png");
+        
+        Image scaledBackImage = backIcon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+        Image scaledHelpImage = helpIcon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+
+        JButton backButton = new JButton(new ImageIcon(scaledBackImage));
+        JButton helpButton = new JButton(new ImageIcon(scaledHelpImage));
+
+        backButton.setPreferredSize(new Dimension(50, 50));
+        helpButton.setPreferredSize(new Dimension(50, 50));
+
+        backButton.addActionListener(e -> backAction.accept(e));
+        helpButton.addActionListener(e -> helpAction.accept(e));
+
+        bottomPanel.add(backButton, BorderLayout.WEST);
+        bottomPanel.add(helpButton, BorderLayout.EAST);
+
+        return bottomPanel;
+    }
+
+    public static JPanel barPanel(int positive, int negative, String positivePattern, String negativePattern) {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0)) {
             private final Random random = new Random();
 
@@ -30,7 +56,7 @@ public class Widgets {
                         index = (index + 1) % negativePatterns.length;
                         repaint();
                     }
-                }, 0, 150);
+                }, 0, 500);
             }
 
             @Override
