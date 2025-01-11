@@ -49,19 +49,19 @@ public class Game {
         ageLabel.setFont(new Font("Arial", Font.BOLD, 16));
         ageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JPanel moneyBar = Widgets.barPanel(40, 30, "green", "red");
-        moneyBar.setAlignmentX(Component.CENTER_ALIGNMENT);
-        JPanel happinessBar = Widgets.barPanel(20, 80, "yellow", "grey");
-        happinessBar.setAlignmentX(Component.CENTER_ALIGNMENT);
+        //JPanel moneyBar = Widgets.barPanel(40, 30, "green", "red");
+        //moneyBar.setAlignmentX(Component.CENTER_ALIGNMENT);
+        //JPanel happinessBar = Widgets.barPanel(20, 80, "yellow", "grey");
+        //happinessBar.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         centerMainPanel.add(Box.createVerticalGlue());
         centerMainPanel.add(avatarLabel);
         centerMainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
         centerMainPanel.add(ageLabel);
         centerMainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
-        centerMainPanel.add(moneyBar);
-        centerMainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
-        centerMainPanel.add(happinessBar);
+        //centerMainPanel.add(moneyBar);
+        //centerMainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+        //centerMainPanel.add(happinessBar);
         centerMainPanel.add(Box.createVerticalGlue());
 
         mainPanel.add(upperMaiPanel, BorderLayout.NORTH);
@@ -96,9 +96,31 @@ public class Game {
     private void setupShopPanel() {
         shopPanel = new JPanel(new BorderLayout());
 
-        JPanel upperShopPanel = new JPanel(new BorderLayout());
-        JPanel categoryShopPanel = new JPanel();
-        categoryShopPanel.setLayout(new BoxLayout(categoryShopPanel, BoxLayout.Y_AXIS));
+        // UPPER PANEL
+        JPanel upperShopPanel = new JPanel(new GridLayout(2, 1));
+        ImageIcon upperPanelIcon = new ImageIcon("assets/upper_panel_image.png");
+        JLabel upperShopLabel = new JLabel(new ImageIcon(upperPanelIcon.getImage().getScaledInstance(-1, 40, Image.SCALE_SMOOTH)));
+        upperShopLabel.setPreferredSize(new Dimension(upperShopLabel.getWidth(), 40));
+
+        JPanel buttonPanel = new JPanel(new GridLayout(1, 2));
+        ImageIcon stockIcon = new ImageIcon("assets/stock_button.png");
+        ImageIcon itemIcon = new ImageIcon("assets/item_button.png");
+
+        Image scaledStockImage = stockIcon.getImage().getScaledInstance(250, 40, Image.SCALE_SMOOTH);
+        Image scaledItemImage = itemIcon.getImage().getScaledInstance(250, 40, Image.SCALE_SMOOTH);
+
+        JButton stockButton = new JButton(new ImageIcon(scaledStockImage));
+        JButton itemButton = new JButton(new ImageIcon(scaledItemImage));
+
+        stockButton.setPreferredSize(new Dimension(250, 40));
+        itemButton.setPreferredSize(new Dimension(250, 40));
+
+        buttonPanel.add(stockButton);
+        buttonPanel.add(itemButton);
+
+        upperShopPanel.add(upperShopLabel);
+        upperShopPanel.add(buttonPanel);
+
         JPanel itemsShopPanel = new JPanel();
         itemsShopPanel.setLayout(new BoxLayout(itemsShopPanel, BoxLayout.Y_AXIS));
         JPanel bottomShopPanel = Widgets.bottomPanel(
@@ -108,7 +130,6 @@ public class Game {
 
         // MAIN PANEL 
         shopPanel.add(upperShopPanel, BorderLayout.NORTH);
-        shopPanel.add(categoryShopPanel, BorderLayout.WEST);
         shopPanel.add(itemsShopPanel, BorderLayout.CENTER);
         shopPanel.add(bottomShopPanel, BorderLayout.SOUTH);
     }

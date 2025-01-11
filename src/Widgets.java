@@ -15,7 +15,7 @@ public class Widgets {
     public static JPanel bottomPanel(Consumer<ActionEvent> backAction, Consumer<ActionEvent> helpAction) { 
         JPanel bottomPanel = new JPanel(new BorderLayout());
 
-        ImageIcon backIcon = new ImageIcon("assets/menu_button.png");
+        ImageIcon backIcon = new ImageIcon("assets/back_button.png");
         ImageIcon helpIcon = new ImageIcon("assets/help_button.png");
         
         Image scaledBackImage = backIcon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);

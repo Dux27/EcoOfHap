@@ -65,7 +65,7 @@ public class Menu {
         JPanel lowerPanel = new JPanel();
         lowerPanel.setLayout(new BoxLayout(lowerPanel, BoxLayout.Y_AXIS));
 
-        ImageIcon backIcon = new ImageIcon("assets/menu_button.png");
+        ImageIcon backIcon = new ImageIcon("assets/back_button.png");
         Image scaledBackImage = backIcon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
     
         JButton backButton = new JButton(new ImageIcon(scaledBackImage));
@@ -119,7 +119,7 @@ public class Menu {
         JPanel lowerPanel = new JPanel();
         lowerPanel.setLayout(new BoxLayout(lowerPanel, BoxLayout.Y_AXIS));
 
-        ImageIcon backIcon = new ImageIcon("assets/menu_button.png");
+        ImageIcon backIcon = new ImageIcon("assets/back_button.png");
         Image scaledBackImage = backIcon.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH);
 
         JButton backButton = new JButton(new ImageIcon(scaledBackImage));
