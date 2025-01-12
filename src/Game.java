@@ -113,16 +113,13 @@ public class Game {
         JLabel upperShopLabel = new JLabel(new ImageIcon(upperPanelIcon.getImage().getScaledInstance(-1, 40, Image.SCALE_SMOOTH)));
         upperShopLabel.setPreferredSize(new Dimension(upperShopLabel.getWidth(), 40));
 
-        JPanel categoryButtonPanel = new JPanel(new GridLayout(1, 3));
-        JButton stockButton = new JButton("Stocks");
+        JPanel categoryButtonPanel = new JPanel(new GridLayout(1, 2));
         JButton houseButton = new JButton("Houses");
         JButton carButton = new JButton("Cars");
 
-        stockButton.setPreferredSize(new Dimension(166, 40));
-        houseButton.setPreferredSize(new Dimension(166, 40));
-        carButton.setPreferredSize(new Dimension(166, 40));
+        houseButton.setPreferredSize(new Dimension(250, 40));
+        carButton.setPreferredSize(new Dimension(250, 40));
 
-        categoryButtonPanel.add(stockButton);
         categoryButtonPanel.add(houseButton);
         categoryButtonPanel.add(carButton);
 
@@ -133,11 +130,10 @@ public class Game {
         itemsShopPanel = new JPanel(new GridLayout(0, 1));
         scrollPane = new JScrollPane(itemsShopPanel);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        Widgets.updateItemsPanel(itemsShopPanel, "Houses", 10);
+        Widgets.updateItemsPanel(itemsShopPanel, "Houses", 10, parentUI.player);
 
-        stockButton.addActionListener(e -> Widgets.updateItemsPanel(itemsShopPanel, "Stocks", 10));
-        houseButton.addActionListener(e -> Widgets.updateItemsPanel(itemsShopPanel, "Houses", 10));
-        carButton.addActionListener(e -> Widgets.updateItemsPanel(itemsShopPanel, "Cars", 10));
+        houseButton.addActionListener(e -> Widgets.updateItemsPanel(itemsShopPanel, "Houses", 10, parentUI.player));
+        carButton.addActionListener(e -> Widgets.updateItemsPanel(itemsShopPanel, "Cars", 10, parentUI.player));
 
         // BOTTOM PANEL
         JPanel bottomShopPanel = Widgets.bottomPanel(

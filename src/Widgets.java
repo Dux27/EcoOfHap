@@ -159,22 +159,42 @@ public class Widgets {
         return panel;
     }
 
-    public static void updateItemsPanel(JPanel itemsShopPanel, String category, int quantity) {
+    public static void updateItemsPanel(JPanel itemsShopPanel, String category, int quantity, Player player) {
         itemsShopPanel.removeAll();
 
         for (int i = 0; i < quantity; i++) {
-            JPanel itemPanel = new JPanel();
+            JPanel itemPanel = new JPanel(new BorderLayout());
             itemPanel.setPreferredSize(new Dimension(450, 120)); 
             itemPanel.setMaximumSize(new Dimension(450, 120));
             itemPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
-            JLabel itemLabel = new JLabel(category + " Item " + (i + 1));
-            itemPanel.add(itemLabel);
+            String imagePath = "assets/" + category.toLowerCase() + "_shopItem_" + (i + 1) + ".png";
+            ImageIcon itemIcon = new ImageIcon(imagePath);
+            JButton itemButton = new JButton(itemIcon);
+            final int itemIndex = i;
+            itemButton.addActionListener(e -> {
+                int response = JOptionPane.showConfirmDialog(null, "Do you want to buy this item?", "Confirm Purchase", JOptionPane.YES_NO_OPTION);
+                if (response == JOptionPane.YES_OPTION) {
+                    // Handle the purchase logic here
+                    System.out.println("Item purchased: " + imagePath);
+                    Item item = new Item(category + " Item " + (itemIndex + 1), 1000, category); 
+                    player.addItemToInventory(item);
+                    printInventory(player);
+                }
+            });
 
+            itemPanel.add(itemButton, BorderLayout.CENTER);
             itemsShopPanel.add(itemPanel);
         }
 
         itemsShopPanel.revalidate();
         itemsShopPanel.repaint();
+    }
+
+    private static void printInventory(Player player) {
+        System.out.println("Player Inventory:");
+        for (Item item : player.inventory) {
+            System.out.println("- " + item.getName());
+        }
     }
 }
