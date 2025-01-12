@@ -5,6 +5,8 @@ public class Game {
     private JPanel mainPanel;
     private JPanel housePanel;
     private JPanel shopPanel;
+    private JPanel itemsShopPanel;
+    private JScrollPane scrollPane;
 
     private final UI parentUI;
 
@@ -49,19 +51,23 @@ public class Game {
         ageLabel.setFont(new Font("Arial", Font.BOLD, 16));
         ageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        //JPanel moneyBar = Widgets.barPanel(40, 30, "green", "red");
-        //moneyBar.setAlignmentX(Component.CENTER_ALIGNMENT);
-        //JPanel happinessBar = Widgets.barPanel(20, 80, "yellow", "grey");
-        //happinessBar.setAlignmentX(Component.CENTER_ALIGNMENT);
+        // Add image to centerMainPanel
+        ImageIcon centerImageIcon = new ImageIcon("assets/center_image.png");
+        JLabel centerImageLabel = new JLabel(centerImageIcon);
+
+        // JPanel moneyBar = Widgets.barPanel(100, 50, "green", "red");
+        // JPanel happyBar = Widgets.barPanel(100, 50, "yellow", "grey");
 
         centerMainPanel.add(Box.createVerticalGlue());
         centerMainPanel.add(avatarLabel);
         centerMainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
         centerMainPanel.add(ageLabel);
-        centerMainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
-        //centerMainPanel.add(moneyBar);
-        //centerMainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
-        //centerMainPanel.add(happinessBar);
+        // centerMainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+        // centerMainPanel.add(moneyBar);
+        // centerMainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+        // centerMainPanel.add(happyBar);
+        // centerMainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+        centerMainPanel.add(centerImageLabel);
         centerMainPanel.add(Box.createVerticalGlue());
 
         mainPanel.add(upperMaiPanel, BorderLayout.NORTH);
@@ -80,9 +86,14 @@ public class Game {
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
+        // Add image to housePanel
+        ImageIcon houseImageIcon = new ImageIcon("assets/house_image.png");
+        JLabel houseImageLabel = new JLabel(houseImageIcon);
+
         housePanel.add(Box.createVerticalGlue());
         housePanel.add(titleLabel);
         housePanel.add(Box.createRigidArea(new Dimension(0, 40)));
+        housePanel.add(houseImageLabel);
 
         JButton backButton = new JButton("Back");
         backButton.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -98,31 +109,37 @@ public class Game {
 
         // UPPER PANEL
         JPanel upperShopPanel = new JPanel(new GridLayout(2, 1));
-        ImageIcon upperPanelIcon = new ImageIcon("assets/upper_panel_image.png");
+        ImageIcon upperPanelIcon = new ImageIcon("assets/upper_shop_image.png");
         JLabel upperShopLabel = new JLabel(new ImageIcon(upperPanelIcon.getImage().getScaledInstance(-1, 40, Image.SCALE_SMOOTH)));
         upperShopLabel.setPreferredSize(new Dimension(upperShopLabel.getWidth(), 40));
 
-        JPanel buttonPanel = new JPanel(new GridLayout(1, 2));
-        ImageIcon stockIcon = new ImageIcon("assets/stock_button.png");
-        ImageIcon itemIcon = new ImageIcon("assets/item_button.png");
+        JPanel categoryButtonPanel = new JPanel(new GridLayout(1, 3));
+        JButton stockButton = new JButton("Stocks");
+        JButton houseButton = new JButton("Houses");
+        JButton carButton = new JButton("Cars");
 
-        Image scaledStockImage = stockIcon.getImage().getScaledInstance(250, 40, Image.SCALE_SMOOTH);
-        Image scaledItemImage = itemIcon.getImage().getScaledInstance(250, 40, Image.SCALE_SMOOTH);
+        stockButton.setPreferredSize(new Dimension(166, 40));
+        houseButton.setPreferredSize(new Dimension(166, 40));
+        carButton.setPreferredSize(new Dimension(166, 40));
 
-        JButton stockButton = new JButton(new ImageIcon(scaledStockImage));
-        JButton itemButton = new JButton(new ImageIcon(scaledItemImage));
-
-        stockButton.setPreferredSize(new Dimension(250, 40));
-        itemButton.setPreferredSize(new Dimension(250, 40));
-
-        buttonPanel.add(stockButton);
-        buttonPanel.add(itemButton);
+        categoryButtonPanel.add(stockButton);
+        categoryButtonPanel.add(houseButton);
+        categoryButtonPanel.add(carButton);
 
         upperShopPanel.add(upperShopLabel);
-        upperShopPanel.add(buttonPanel);
+        upperShopPanel.add(categoryButtonPanel);
 
-        JPanel itemsShopPanel = new JPanel();
-        itemsShopPanel.setLayout(new BoxLayout(itemsShopPanel, BoxLayout.Y_AXIS));
+        // ITEMS PANEL
+        itemsShopPanel = new JPanel(new GridLayout(0, 1));
+        scrollPane = new JScrollPane(itemsShopPanel);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        Widgets.updateItemsPanel(itemsShopPanel, "Houses", 10);
+
+        stockButton.addActionListener(e -> Widgets.updateItemsPanel(itemsShopPanel, "Stocks", 10));
+        houseButton.addActionListener(e -> Widgets.updateItemsPanel(itemsShopPanel, "Houses", 10));
+        carButton.addActionListener(e -> Widgets.updateItemsPanel(itemsShopPanel, "Cars", 10));
+
+        // BOTTOM PANEL
         JPanel bottomShopPanel = Widgets.bottomPanel(
             e -> showGame(), 
             e -> showHelp()
@@ -130,7 +147,7 @@ public class Game {
 
         // MAIN PANEL 
         shopPanel.add(upperShopPanel, BorderLayout.NORTH);
-        shopPanel.add(itemsShopPanel, BorderLayout.CENTER);
+        shopPanel.add(scrollPane, BorderLayout.CENTER);
         shopPanel.add(bottomShopPanel, BorderLayout.SOUTH);
     }
 
@@ -139,6 +156,7 @@ public class Game {
         parentUI.getContentPane().add(mainPanel);
         parentUI.revalidate();
         parentUI.repaint();
+        MainLoop.startGame(); // Start the game loop
     }
 
     public void showHouse() {
@@ -146,6 +164,7 @@ public class Game {
         parentUI.getContentPane().add(housePanel);
         parentUI.revalidate();
         parentUI.repaint();
+        MainLoop.stopGame(); // Stop the game loop
     }
 
     public void showShop() {
@@ -153,6 +172,7 @@ public class Game {
         parentUI.getContentPane().add(shopPanel);
         parentUI.revalidate();
         parentUI.repaint();
+        MainLoop.stopGame(); // Stop the game loop
     }
 
     public void showHelp() {

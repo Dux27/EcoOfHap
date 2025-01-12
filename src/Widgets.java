@@ -154,8 +154,27 @@ public class Widgets {
                     g2d.fillRect(positiveWidth, 3, 20, getHeight() - 6); 
             }
         };
-        panel.setPreferredSize(new Dimension(340, 30)); // Adjusted size
-        panel.setMaximumSize(new Dimension(340, 30)); // Ensure it doesn't stretch
+        panel.setPreferredSize(new Dimension(340, 30)); 
+        panel.setMaximumSize(new Dimension(340, 30)); 
         return panel;
+    }
+
+    public static void updateItemsPanel(JPanel itemsShopPanel, String category, int quantity) {
+        itemsShopPanel.removeAll();
+
+        for (int i = 0; i < quantity; i++) {
+            JPanel itemPanel = new JPanel();
+            itemPanel.setPreferredSize(new Dimension(450, 120)); 
+            itemPanel.setMaximumSize(new Dimension(450, 120));
+            itemPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+
+            JLabel itemLabel = new JLabel(category + " Item " + (i + 1));
+            itemPanel.add(itemLabel);
+
+            itemsShopPanel.add(itemPanel);
+        }
+
+        itemsShopPanel.revalidate();
+        itemsShopPanel.repaint();
     }
 }

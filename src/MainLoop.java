@@ -16,6 +16,8 @@ public class MainLoop {
     }
 
     public static void startGame() {
+        if (running) 
+            return; // If the game loop is already running, do not start a new thread. Preventing multiple threads from running the game loop.
         running = true;
         new Thread(() -> {
             boolean printed = false;
