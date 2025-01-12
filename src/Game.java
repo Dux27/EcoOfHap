@@ -7,6 +7,7 @@ public class Game {
     private JPanel shopPanel;
     private JPanel itemsShopPanel;
     private JScrollPane scrollPane;
+    private JPanel inventoryPanel;
 
     private final UI parentUI;
 
@@ -15,6 +16,7 @@ public class Game {
         setupGamePanel();
         setupHousePanel();
         setupShopPanel();
+        setupInventoryPanel(); // Add this line
     }
 
     private void setupGamePanel() {
@@ -91,7 +93,7 @@ public class Game {
         Image scaledInventoryImage = inventoryIcon.getImage().getScaledInstance(250, 40, Image.SCALE_SMOOTH);
         JButton inventoryButton = new JButton(new ImageIcon(scaledInventoryImage));
         inventoryButton.setPreferredSize(new Dimension(250, 40));
-        // inventoryButton.addActionListener(e -> showInventory());
+        inventoryButton.addActionListener(e -> showInventory());
 
         JPanel inventoryButtonPanel = new JPanel();
         inventoryButtonPanel.add(inventoryButton);
@@ -163,6 +165,64 @@ public class Game {
         shopPanel.add(bottomShopPanel, BorderLayout.SOUTH);
     }
 
+    private void setupInventoryPanel() {
+        inventoryPanel = new JPanel(new BorderLayout());
+        inventoryPanel.setPreferredSize(new Dimension(450, 120)); // Set preferred size
+
+        // UPPER PANEL
+        JPanel upperInventoryPanel = new JPanel(new BorderLayout());
+        ImageIcon upperInventoryIcon = new ImageIcon("assets/patterns/yellow_pattern_1.jpg");
+        JLabel upperInventoryLabel = new JLabel(new ImageIcon(upperInventoryIcon.getImage().getScaledInstance(500, 40, Image.SCALE_SMOOTH)));
+        upperInventoryLabel.setPreferredSize(new Dimension(500, 40));
+
+        upperInventoryPanel.add(upperInventoryLabel, BorderLayout.NORTH);
+
+        // CENTER PANEL
+        JPanel centerInventoryPanel = new JPanel();
+        centerInventoryPanel.setLayout(new BoxLayout(centerInventoryPanel, BoxLayout.Y_AXIS)); 
+        JScrollPane inventoryScrollPane = new JScrollPane(centerInventoryPanel);
+        inventoryScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        updateInventoryPanel(centerInventoryPanel);
+
+        // BOTTOM PANEL
+        JPanel bottomInventoryPanel = Widgets.bottomPanel(
+            e -> showHouse(), 
+            e -> showHelp()
+        );
+
+        inventoryPanel.add(upperInventoryPanel, BorderLayout.NORTH);
+        inventoryPanel.add(inventoryScrollPane, BorderLayout.CENTER);
+        inventoryPanel.add(bottomInventoryPanel, BorderLayout.SOUTH);
+    }
+
+    private void updateInventoryPanel(JPanel panel) {
+        panel.removeAll();
+        if (parentUI.player != null && parentUI.player.inventory != null) {
+            for (Item item : parentUI.player.inventory) {
+                addItemToPanel(panel, item);
+            }
+        }
+        panel.revalidate();
+        panel.repaint();
+    }
+
+    private void addItemToPanel(JPanel panel, Item item) {
+        JPanel itemPanel = new JPanel(new BorderLayout());
+        itemPanel.setPreferredSize(new Dimension(450, 120)); // Set the same size as in the shop
+        itemPanel.setMaximumSize(new Dimension(480, 120));
+        itemPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+
+        String imagePath = "assets/" + item.category.toLowerCase() + "_shopItem_1" + ".png";
+        ImageIcon itemIcon = new ImageIcon(imagePath);
+        Image scaledImage = itemIcon.getImage().getScaledInstance(480, 120, Image.SCALE_SMOOTH);
+        JLabel itemLabel = new JLabel(item.getName(), new ImageIcon(scaledImage), JLabel.CENTER);
+        itemLabel.setHorizontalTextPosition(JLabel.CENTER);
+        itemLabel.setVerticalTextPosition(JLabel.BOTTOM);
+
+        itemPanel.add(itemLabel, BorderLayout.CENTER);
+        panel.add(itemPanel);
+    }
+
     public void showGame() {
         parentUI.getContentPane().removeAll();
         parentUI.getContentPane().add(mainPanel);
@@ -182,6 +242,15 @@ public class Game {
     public void showShop() {
         parentUI.getContentPane().removeAll();
         parentUI.getContentPane().add(shopPanel);
+        parentUI.revalidate();
+        parentUI.repaint();
+        MainLoop.stopGame(); // Stop the game loop
+    }
+
+    public void showInventory() {
+        updateInventoryPanel((JPanel) ((JScrollPane) inventoryPanel.getComponent(1)).getViewport().getView());
+        parentUI.getContentPane().removeAll();
+        parentUI.getContentPane().add(inventoryPanel);
         parentUI.revalidate();
         parentUI.repaint();
         MainLoop.stopGame(); // Stop the game loop

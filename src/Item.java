@@ -3,10 +3,10 @@ import java.util.List;
 import java.util.Random;
 
 public class Item {
-    private final String name;
-    private final String category;
-    private final float price;
-    private final int sellPrice;
+    public final String name;
+    public final String category;
+    public final float price;
+    public final int sellPrice;
     private List<Effect> activeEffects;
 
     public Item(String name, float price, String category) {
