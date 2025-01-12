@@ -79,29 +79,45 @@ public class Game {
     }
 
     private void setupHousePanel() {
-        housePanel = new JPanel();
-        housePanel.setLayout(new BoxLayout(housePanel, BoxLayout.Y_AXIS));
+        housePanel = new JPanel(new BorderLayout());
 
-        JLabel titleLabel = new JLabel("HOUSE");
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        // UPPER PANEL
+        JPanel upperHousePanel = new JPanel(new BorderLayout());
+        ImageIcon upperHouseIcon = new ImageIcon("assets/patterns/green_pattern_1.jpg");
+        JLabel upperHouseLabel = new JLabel(new ImageIcon(upperHouseIcon.getImage().getScaledInstance(500, 40, Image.SCALE_SMOOTH)));
+        upperHouseLabel.setPreferredSize(new Dimension(500, 40));
 
-        // Add image to housePanel
-        ImageIcon houseImageIcon = new ImageIcon("assets/house_image.png");
+        ImageIcon inventoryIcon = new ImageIcon("assets/patterns/grey_pattern_1.jpg");
+        Image scaledInventoryImage = inventoryIcon.getImage().getScaledInstance(250, 40, Image.SCALE_SMOOTH);
+        JButton inventoryButton = new JButton(new ImageIcon(scaledInventoryImage));
+        inventoryButton.setPreferredSize(new Dimension(250, 40));
+        // inventoryButton.addActionListener(e -> showInventory());
+
+        JPanel inventoryButtonPanel = new JPanel();
+        inventoryButtonPanel.add(inventoryButton);
+
+        upperHousePanel.add(upperHouseLabel, BorderLayout.NORTH);
+        upperHousePanel.add(inventoryButtonPanel, BorderLayout.SOUTH);
+
+        // CENTER PANEL
+        JPanel centerHousePanel = new JPanel();
+        centerHousePanel.setLayout(new BoxLayout(centerHousePanel, BoxLayout.Y_AXIS));
+        ImageIcon houseImageIcon = new ImageIcon("assets/patterns/yellow_pattern_1.jpg");
         JLabel houseImageLabel = new JLabel(houseImageIcon);
 
-        housePanel.add(Box.createVerticalGlue());
-        housePanel.add(titleLabel);
-        housePanel.add(Box.createRigidArea(new Dimension(0, 40)));
-        housePanel.add(houseImageLabel);
+        centerHousePanel.add(Box.createVerticalGlue());
+        centerHousePanel.add(houseImageLabel);
+        centerHousePanel.add(Box.createVerticalGlue());
 
-        JButton backButton = new JButton("Back");
-        backButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        backButton.addActionListener(e -> showGame());
+        // BOTTOM PANEL
+        JPanel bottomHousePanel = Widgets.bottomPanel(
+            e -> showGame(), 
+            e -> showHelp()
+        );
 
-        housePanel.add(Box.createVerticalGlue());
-        housePanel.add(backButton);
-        housePanel.add(Box.createVerticalGlue());
+        housePanel.add(upperHousePanel, BorderLayout.NORTH);
+        housePanel.add(centerHousePanel, BorderLayout.CENTER);
+        housePanel.add(bottomHousePanel, BorderLayout.SOUTH);
     }
 
     private void setupShopPanel() {
@@ -110,7 +126,7 @@ public class Game {
         // UPPER PANEL
         JPanel upperShopPanel = new JPanel(new GridLayout(2, 1));
         ImageIcon upperPanelIcon = new ImageIcon("assets/upper_shop_image.png");
-        JLabel upperShopLabel = new JLabel(new ImageIcon(upperPanelIcon.getImage().getScaledInstance(-1, 40, Image.SCALE_SMOOTH)));
+        JLabel upperShopLabel = new JLabel(new ImageIcon(upperPanelIcon.getImage().getScaledInstance(500, 40, Image.SCALE_SMOOTH)));
         upperShopLabel.setPreferredSize(new Dimension(upperShopLabel.getWidth(), 40));
 
         JPanel categoryButtonPanel = new JPanel(new GridLayout(1, 2));
