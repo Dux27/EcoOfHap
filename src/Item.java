@@ -5,11 +5,11 @@ import java.util.Random;
 public class Item {
     public final String name;
     public final String category;
-    public final float price;
-    public final int sellPrice;
-    private List<Effect> activeEffects;
+    public final int price;
+    public int sellPrice;
+    public List<Effect> activeEffects;
 
-    public Item(String name, float price, String category) {
+    public Item(String name, int price, String category) {
         this.name = name;
         this.category = category;
         this.price = price;
@@ -36,5 +36,9 @@ public class Item {
 
     public String getName() {
         return name;
+    }
+
+    public void increaseValue(float percentage) {
+        sellPrice += sellPrice * percentage;
     }
 }

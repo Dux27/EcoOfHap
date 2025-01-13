@@ -8,15 +8,18 @@ public class Game {
     private JPanel itemsShopPanel;
     private JScrollPane scrollPane;
     private JPanel inventoryPanel;
+    private JLabel ageLabel; // Add ageLabel as a class member
 
     private final UI parentUI;
+    private final Inventory inventory;
 
     public Game(UI parentUI) {
         this.parentUI = parentUI;
+        this.inventory = new Inventory(parentUI.player);
         setupGamePanel();
         setupHousePanel();
         setupShopPanel();
-        setupInventoryPanel(); // Add this line
+        setupInventoryPanel();
     }
 
     private void setupGamePanel() {
@@ -49,7 +52,7 @@ public class Game {
         JLabel avatarLabel = new JLabel(new ImageIcon(iconPath));
         avatarLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JLabel ageLabel = new JLabel("Age: " + (parentUI.player != null ? parentUI.player.age : "N/A"));
+        ageLabel = new JLabel("Age: " + (parentUI.player != null ? parentUI.player.age : "N/A")); // Initialize ageLabel
         ageLabel.setFont(new Font("Arial", Font.BOLD, 16));
         ageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -182,7 +185,7 @@ public class Game {
         centerInventoryPanel.setLayout(new BoxLayout(centerInventoryPanel, BoxLayout.Y_AXIS)); 
         JScrollPane inventoryScrollPane = new JScrollPane(centerInventoryPanel);
         inventoryScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        updateInventoryPanel(centerInventoryPanel);
+        inventory.updateInventoryPanel(centerInventoryPanel);
 
         // BOTTOM PANEL
         JPanel bottomInventoryPanel = Widgets.bottomPanel(
@@ -195,40 +198,12 @@ public class Game {
         inventoryPanel.add(bottomInventoryPanel, BorderLayout.SOUTH);
     }
 
-    private void updateInventoryPanel(JPanel panel) {
-        panel.removeAll();
-        if (parentUI.player != null && parentUI.player.inventory != null) {
-            for (Item item : parentUI.player.inventory) {
-                addItemToPanel(panel, item);
-            }
-        }
-        panel.revalidate();
-        panel.repaint();
-    }
-
-    private void addItemToPanel(JPanel panel, Item item) {
-        JPanel itemPanel = new JPanel(new BorderLayout());
-        itemPanel.setPreferredSize(new Dimension(450, 120)); // Set the same size as in the shop
-        itemPanel.setMaximumSize(new Dimension(480, 120));
-        itemPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-
-        String imagePath = "assets/" + item.category.toLowerCase() + "_shopItem_1" + ".png";
-        ImageIcon itemIcon = new ImageIcon(imagePath);
-        Image scaledImage = itemIcon.getImage().getScaledInstance(480, 120, Image.SCALE_SMOOTH);
-        JLabel itemLabel = new JLabel(item.getName(), new ImageIcon(scaledImage), JLabel.CENTER);
-        itemLabel.setHorizontalTextPosition(JLabel.CENTER);
-        itemLabel.setVerticalTextPosition(JLabel.BOTTOM);
-
-        itemPanel.add(itemLabel, BorderLayout.CENTER);
-        panel.add(itemPanel);
-    }
-
     public void showGame() {
         parentUI.getContentPane().removeAll();
         parentUI.getContentPane().add(mainPanel);
         parentUI.revalidate();
         parentUI.repaint();
-        MainLoop.startGame(); // Start the game loop
+        MainLoop.startGame(parentUI); // Pass the UI instance to the MainLoop
     }
 
     public void showHouse() {
@@ -248,7 +223,7 @@ public class Game {
     }
 
     public void showInventory() {
-        updateInventoryPanel((JPanel) ((JScrollPane) inventoryPanel.getComponent(1)).getViewport().getView());
+        inventory.updateInventoryPanel((JPanel) ((JScrollPane) inventoryPanel.getComponent(1)).getViewport().getView());
         parentUI.getContentPane().removeAll();
         parentUI.getContentPane().add(inventoryPanel);
         parentUI.revalidate();
@@ -258,5 +233,9 @@ public class Game {
 
     public void showHelp() {
         // Help functionality
+    }
+
+    public void updateAgeLabel() {
+        ageLabel.setText("Age: " + parentUI.player.age);
     }
 }

@@ -31,7 +31,7 @@ public class UI extends JFrame {
     public void activateGame() {
         continueGame = true;
         game.showGame();
-        MainLoop.startGame();
+        MainLoop.startGame(this); // Pass the UI instance to the MainLoop
     }
 
     public void activateMenu() {
