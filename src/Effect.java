@@ -21,10 +21,17 @@ public class Effect {
         if (MainLoop.TIC_COUNTER % activationFrequency == 0) {
             if (isLinearFunc) 
                 change = calculateLinearChange();
-
-            if ("happy".equals(category)) {
+            System.out.println("Effect applied: " + name);
+            if ("happiness".equals(category)) {
+                if (change > 0 && !activated) {
+                    player.happinessGain += change;
+                    activated = true;
+                } else if (change < 0 && !activated) {
+                    player.happinessLoss += (change * -1);
+                    activated = true;
+                }
                 player.changeHappiness(change);
-            } else if ("money".equals(category)) 
+            } else if ("money".equals(category)) {
                 if (change > 0 && !activated) {
                     player.moneyGain += change;
                     activated = true;
@@ -33,8 +40,7 @@ public class Effect {
                     activated = true;
                 }
                 player.changeMoney(change);
-                
-            System.out.println("Effect applied: " + name);
+            }
         }
     }
 

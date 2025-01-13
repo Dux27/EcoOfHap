@@ -179,6 +179,12 @@ public class Widgets {
                     Item item = new Item(category + " Item " + (itemIndex + 1), 1000, category, purchaseTick); 
                     player.addItemToInventory(item);
                     player.printInventory();
+
+                    // Add happiness gain effect for 3 years (36 months)
+                    if (category.equals("Houses")) {
+                        Effect happinessEffect = new Effect("House Happiness", 50, 36, 12, "happiness", false);
+                        player.addEffect(happinessEffect);
+                    }
                 }
             });
 

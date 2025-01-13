@@ -38,12 +38,14 @@ public class MainLoop {
                     for (Item item : ui.player.inventory) {
                         if (("Houses".equals(item.category) && (TIC_COUNTER - item.purchaseTick) % 12 == 0)) {
                             item.increaseValue(0.02f); // Increase value by 2%
-                            System.out.println("House values updated for year: " + ((TIC_COUNTER / 12) - (item.purchaseTick / 12)) + " - " + item.name + ": $" + item.sellPrice);
+                            System.out.println(
+                                    "House values updated for year: " + ((TIC_COUNTER / 12) - (item.purchaseTick / 12))
+                                            + " - " + item.name + ": $" + item.sellPrice);
                         }
                     }
+                    // Update player age
                     ui.player.age++;
-                    ui.game.updateAgeLabel(); // Update the age label in the game panel
-                    System.out.println("Player age updated to: " + ui.player.age);
+                    ui.game.updateAgeLabel(); 
 
                     // Check if the player dies
                     if (ui.player.calculateChanceToDie()) {

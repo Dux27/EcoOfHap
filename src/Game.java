@@ -246,7 +246,7 @@ public class Game {
 
     public void updateBars() {
         moneyBar.updateValues(parentUI.player.moneyGain, parentUI.player.moneyLoss);
-        happyBar.updateValues(100, 50); // Update with actual values if needed
+        happyBar.updateValues(parentUI.player.happinessGain, parentUI.player.happinessLoss);
         centerMainPanel.revalidate();
         centerMainPanel.repaint();
     }
