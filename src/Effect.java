@@ -1,13 +1,15 @@
 public class Effect {
     public final String name;
-    private final String type;
-    private final int change;
-    private long remainingTicks; 
+    public final String category;
+    public final String type;
+    public final int change;
+    public long remainingTicks; 
     private final int activationFrequency;
     private final boolean isLinearFunc;
 
-    public Effect(String name, int change, long durationTicks, int activationFrequency, String type, boolean isLinearFunc) {
+    public Effect(String name, int change, long durationTicks, int activationFrequency, String category, String type, boolean isLinearFunc) {
         this.name = name;
+        this.category = category;
         this.type = type;
         this.change = change;
         this.remainingTicks = durationTicks;
@@ -15,15 +17,15 @@ public class Effect {
         this.isLinearFunc = isLinearFunc;
     }
 
-    public void applyEffect(Player player, long tickCounter) {
-        if (tickCounter % activationFrequency == 0) {
+    public void applyEffect(Player player) {
+        if (MainLoop.TIC_COUNTER % activationFrequency == 0) {
             int appliedChange = change;
             if (isLinearFunc) 
                 appliedChange = calculateLinearChange();
 
-            if ("happy".equals(type)) {
+            if ("happy".equals(category)) {
                 player.changeHappiness(appliedChange);
-            } else if ("money".equals(type)) 
+            } else if ("money".equals(category)) 
                 player.changeMoney(appliedChange);
                 
             System.out.println("Effect applied: " + name);

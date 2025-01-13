@@ -60,18 +60,18 @@ public class Game {
         ImageIcon centerImageIcon = new ImageIcon("assets/center_image.png");
         JLabel centerImageLabel = new JLabel(centerImageIcon);
 
-        // JPanel moneyBar = Widgets.barPanel(100, 50, "green", "red");
-        // JPanel happyBar = Widgets.barPanel(100, 50, "yellow", "grey");
+        JPanel moneyBar = Widgets.barPanel(parentUI.player.moneyGain, parentUI.player.moneyLoss, "green", "red");
+        JPanel happyBar = Widgets.barPanel(100, 50, "yellow", "grey");
 
         centerMainPanel.add(Box.createVerticalGlue());
         centerMainPanel.add(avatarLabel);
         centerMainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
         centerMainPanel.add(ageLabel);
-        // centerMainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
-        // centerMainPanel.add(moneyBar);
-        // centerMainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
-        // centerMainPanel.add(happyBar);
-        // centerMainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+        centerMainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+        centerMainPanel.add(moneyBar);
+        centerMainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+        centerMainPanel.add(happyBar);
+        centerMainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
         centerMainPanel.add(centerImageLabel);
         centerMainPanel.add(Box.createVerticalGlue());
 

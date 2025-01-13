@@ -8,17 +8,17 @@ public class Item {
     public final int price;
     public int sellPrice;
     public List<Effect> activeEffects;
+    public final long purchaseTick; // Add field to store the purchase tick
 
-    public Item(String name, int price, String category) {
+    public Item(String name, int price, String category, long purchaseTick) {
         this.name = name;
         this.category = category;
         this.price = price;
+        this.purchaseTick = purchaseTick; // Initialize purchase tick
         this.activeEffects = new ArrayList<>();
-        Random random = new Random();
         switch (category) {
             case "Houses":
-                float multiplier = 0.8f + (1.2f - 0.8f) * random.nextFloat();
-                this.sellPrice = (int) (price * multiplier);
+                this.sellPrice = price;
                 break;
             case "Cars":
                 this.sellPrice = (int) (price * 0.8);
@@ -32,10 +32,6 @@ public class Item {
 
     public void addActiveEffect(Effect effect) {
         activeEffects.add(effect);
-    }
-
-    public String getName() {
-        return name;
     }
 
     public void increaseValue(float percentage) {

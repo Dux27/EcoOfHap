@@ -8,6 +8,8 @@ public class Player {
     public int age;
     public int happiness;
     public int money;
+    public int moneyLoss;
+    public int moneyGain;
     public int health;
     public String icon;
     public List<Item> inventory;
@@ -29,12 +31,12 @@ public class Player {
         activeEffects.add(effect);
     }
 
-    public void updateEffects(long tickCounter) {
+    public void updateEffects() {
         Iterator<Effect> iterator = activeEffects.iterator();
         while (iterator.hasNext()) {
             Effect effect = iterator.next();
-            effect.applyEffect(this, tickCounter); 
-            effect.reduceTicks();                 
+            effect.applyEffect(this); 
+            effect.remainingTicks--;                 
             if (effect.isExpired()) {
                 System.out.println("Effect expired: " + effect.name);
                 iterator.remove();                
@@ -51,7 +53,20 @@ public class Player {
     }
 
     public void addItemToInventory(Item item) {
-        inventory.add(item);
+        if (money >= item.price) {
+            inventory.add(item);
+            money -= item.price;
+            System.out.println("Item purchased: " + item.name);
+        } else {
+            System.out.println("Not enough money to purchase: " + item.name);
+        }
+    }
+
+    public void printInventory() {
+        System.out.println("Player Inventory:");
+        for (Item item : inventory) {
+            System.out.println("- " + item.name);
+        }
     }
 
     public boolean calculateChanceToDie() {

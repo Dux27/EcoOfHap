@@ -177,9 +177,11 @@ public class Widgets {
                 if (response == JOptionPane.YES_OPTION) {
                     // Handle the purchase logic here
                     System.out.println("Item purchased: " + imagePath);
-                    Item item = new Item(category + " Item " + (itemIndex + 1), 1000, category); 
+                    long purchaseTick = MainLoop.TIC_COUNTER % 12;
+                    purchaseTick -= MainLoop.TIC_COUNTER;
+                    Item item = new Item(category + " Item " + (itemIndex + 1), 1000, category, purchaseTick); 
                     player.addItemToInventory(item);
-                    printInventory(player);
+                    player.printInventory();
                 }
             });
 
@@ -189,12 +191,5 @@ public class Widgets {
 
         itemsShopPanel.revalidate();
         itemsShopPanel.repaint();
-    }
-
-    private static void printInventory(Player player) {
-        System.out.println("Player Inventory:");
-        for (Item item : player.inventory) {
-            System.out.println("- " + item.getName());
-        }
     }
 }
