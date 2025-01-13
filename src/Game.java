@@ -8,7 +8,12 @@ public class Game {
     private JPanel itemsShopPanel;
     private JScrollPane scrollPane;
     private JPanel inventoryPanel;
-    private JLabel ageLabel; // Add ageLabel as a class member
+
+    // Center main panel components
+    private JPanel centerMainPanel;
+    private JLabel ageLabel; 
+    private Widgets.BarPanel moneyBar; 
+    private Widgets.BarPanel happyBar;
 
     private final UI parentUI;
     private final Inventory inventory;
@@ -26,7 +31,7 @@ public class Game {
         mainPanel = new JPanel(new BorderLayout());
 
         JPanel upperMaiPanel = new JPanel(new BorderLayout());
-        JPanel centerMainPanel = new JPanel();
+        centerMainPanel = new JPanel();
         centerMainPanel.setLayout(new BoxLayout(centerMainPanel, BoxLayout.Y_AXIS));
         JPanel bottomMainPanel = Widgets.bottomPanel(
             e -> parentUI.activateMenu(), 
@@ -60,8 +65,8 @@ public class Game {
         ImageIcon centerImageIcon = new ImageIcon("assets/center_image.png");
         JLabel centerImageLabel = new JLabel(centerImageIcon);
 
-        JPanel moneyBar = Widgets.barPanel(parentUI.player.moneyGain, parentUI.player.moneyLoss, "green", "red");
-        JPanel happyBar = Widgets.barPanel(100, 50, "yellow", "grey");
+        moneyBar = new Widgets().new BarPanel(parentUI.player.moneyGain, parentUI.player.moneyLoss, "green", "red");
+        happyBar = new Widgets().new BarPanel(100, 50, "yellow", "grey");
 
         centerMainPanel.add(Box.createVerticalGlue());
         centerMainPanel.add(avatarLabel);
@@ -237,5 +242,12 @@ public class Game {
 
     public void updateAgeLabel() {
         ageLabel.setText("Age: " + parentUI.player.age);
+    }
+
+    public void updateBars() {
+        moneyBar.updateValues(parentUI.player.moneyGain, parentUI.player.moneyLoss);
+        happyBar.updateValues(100, 50); // Update with actual values if needed
+        centerMainPanel.revalidate();
+        centerMainPanel.repaint();
     }
 }

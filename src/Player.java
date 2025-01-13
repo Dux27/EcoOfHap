@@ -13,14 +13,19 @@ public class Player {
     public int health;
     public String icon;
     public List<Item> inventory;
-    private List<Effect> activeEffects;
-    private Random random = new Random();
+    private final List<Effect> activeEffects;
+    private final Random random = new Random();
 
-    public Player(String name, int age, int happiness, int money, int health, String icon) {
+    private final UI parentUI;
+
+    public Player(UI parentUI, String name, int age, int happiness, int money, int health, String icon) {
+        this.parentUI = parentUI;
         this.name = name;
         this.age = age;
         this.happiness = happiness;
         this.money = money;
+        this.moneyLoss = 0;
+        this.moneyGain = 0;
         this.health = health;
         this.icon = icon;
         this.inventory = new ArrayList<>();
@@ -36,8 +41,15 @@ public class Player {
         while (iterator.hasNext()) {
             Effect effect = iterator.next();
             effect.applyEffect(this); 
-            effect.remainingTicks--;                 
+            effect.remainingTicks--;
+
+            // Remove effect if it has expired
             if (effect.isExpired()) {
+                if (effect.change > 0) {
+                    moneyGain -= effect.change;
+                } else {
+                    moneyLoss -= effect.change;
+                }
                 System.out.println("Effect expired: " + effect.name);
                 iterator.remove();                
             }
@@ -50,6 +62,10 @@ public class Player {
 
     public void changeMoney(int amount) {
         money += amount;
+        parentUI.game.updateBars();
+        System.out.println("Money: " + money);
+        System.out.println("Money Gain: " + moneyGain);
+        System.out.println("Money Loss: " + moneyLoss);
     }
 
     public void addItemToInventory(Item item) {

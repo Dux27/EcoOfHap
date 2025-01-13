@@ -40,7 +40,7 @@ public class UI extends JFrame {
     }
 
     public void createPlayer(int age, String icon) {
-        player = new Player("Player", age, 100, 1000, 100, icon);
+        player = new Player(this, "Player", age, 100, 1000, 100, icon);
         System.out.println(
                 "PLAYER CREATED \nname = " + player.name +
                 "\nAge = " + player.age +
