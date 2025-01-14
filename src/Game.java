@@ -66,7 +66,7 @@ public class Game {
         JLabel centerImageLabel = new JLabel(centerImageIcon);
 
         moneyBar = new Widgets().new BarPanel(parentUI.player.moneyGain, parentUI.player.moneyLoss, "green", "red");
-        happyBar = new Widgets().new BarPanel(100, 50, "yellow", "grey");
+        happyBar = new Widgets().new BarPanel(parentUI.player.happinessGain, parentUI.player.happinessLoss, "yellow", "grey");
 
         centerMainPanel.add(Box.createVerticalGlue());
         centerMainPanel.add(avatarLabel);

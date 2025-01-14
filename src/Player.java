@@ -25,7 +25,7 @@ public class Player {
         this.name = name;
         this.age = age;
         this.happiness = happiness;
-        this.happinessLoss = 1;
+        this.happinessLoss = 10;
         this.happinessGain = 1;
         this.money = money;
         this.moneyLoss = 1;
@@ -48,7 +48,7 @@ public class Player {
             effect.remainingTicks--;
 
             // Remove effect if it has expired
-            if (effect.isExpired()) {
+            if (effect.isExpired() && !effect.isLinearFunc) {
                 if (effect.change > 0) {
                     if (effect.category.equals("money")) {
                         moneyGain -= effect.change;

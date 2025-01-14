@@ -3,8 +3,8 @@ public class Effect {
     public final String category;
     public int change;
     public long remainingTicks; 
-    private final int activationFrequency;
-    private final boolean isLinearFunc;
+    public final int activationFrequency;
+    public final boolean isLinearFunc;
 
     private boolean activated = false;
 
@@ -19,8 +19,9 @@ public class Effect {
 
     public void applyEffect(Player player) {
         if (MainLoop.TIC_COUNTER % activationFrequency == 0) {
-            if (isLinearFunc) 
-                change = calculateLinearChange();
+            if (isLinearFunc && activated) 
+                calculateLinearChange(player);
+                
             System.out.println("Effect applied: " + name);
             if ("happiness".equals(category)) {
                 if (change > 0 && !activated) {
@@ -44,8 +45,35 @@ public class Effect {
         }
     }
 
-    private int calculateLinearChange() {
-        return (int) (change * (remainingTicks / (double) activationFrequency));
+    private void calculateLinearChange(Player player) {
+        double decrement = (double) change / (remainingTicks / activationFrequency);
+        if ("happiness".equals(category)) {
+            if (change > 0) {
+                player.happinessGain -= decrement;
+                if (remainingTicks <= activationFrequency) {
+                    player.happinessGain -= player.happinessGain % decrement;
+                }
+            } else {
+                player.happinessLoss -= decrement * -1;
+                if (remainingTicks <= activationFrequency) {
+                    player.happinessLoss -= player.happinessLoss % (decrement * -1);
+                }
+            }
+            player.changeHappiness(change);
+        } else if ("money".equals(category)) {
+            if (change > 0) {
+                player.moneyGain -= decrement;
+                if (remainingTicks <= activationFrequency) {
+                    player.moneyGain -= player.moneyGain % decrement;
+                }
+            } else {
+                player.moneyLoss -= decrement * -1;
+                if (remainingTicks <= activationFrequency) {
+                    player.moneyLoss -= player.moneyLoss % (decrement * -1);
+                }
+            }
+            player.changeMoney(change);
+        }
     }
 
     public void reduceTicks() {
