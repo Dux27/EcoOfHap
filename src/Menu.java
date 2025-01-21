@@ -18,7 +18,7 @@ public class Menu {
     }
 
     private void setupMenuPanel() {
-        menuPanel = createBackgroundPanel("assets/menu_background.png");
+        menuPanel = createBackgroundPanel("assets/game_background.png");
         menuPanel.setLayout(new BoxLayout(menuPanel, BoxLayout.Y_AXIS));
 
         ImageIcon titleIcon = new ImageIcon("assets/menu_logo.png");
@@ -63,7 +63,7 @@ public class Menu {
     }
 
     private void setupPlayerSelectPanel() {
-        playerSelectPanel = createBackgroundPanel("assets/menu_background.png");
+        playerSelectPanel = createBackgroundPanel("assets/game_background.png");
         playerSelectPanel.setLayout(new BorderLayout());
 
         JPanel upperPanel = new JPanel(new BorderLayout());
@@ -83,29 +83,27 @@ public class Menu {
         backButton.addActionListener(e -> showMenu());
         upperPanel.add(backButton, BorderLayout.WEST);
 
-        JLabel titleLabel = new JLabel("SELECT PLAYER");
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        ImageIcon selectPlayerIcon = new ImageIcon("assets/select_player_logo.png");
+        JLabel selectPlayerLabel = new JLabel(selectPlayerIcon);
+        selectPlayerLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         lowerPanel.add(Box.createVerticalGlue());
-        lowerPanel.add(titleLabel);
+        lowerPanel.add(selectPlayerLabel);
         lowerPanel.add(Box.createRigidArea(new Dimension(0, 40)));
 
-        JButton player1Button = createButton("assets/player1_button.png", 120, 50);
+        // Combined player image
+        ImageIcon combinedPlayerImageIcon = new ImageIcon("assets/2_player.png");
+        Image scaledCombinedPlayerImage = combinedPlayerImageIcon.getImage().getScaledInstance(300, -1, Image.SCALE_SMOOTH);
+        JLabel combinedPlayerImageLabel = new JLabel(new ImageIcon(scaledCombinedPlayerImage));
+        combinedPlayerImageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        lowerPanel.add(combinedPlayerImageLabel);
+        lowerPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+
+        // Player 2 button
         JButton player2Button = createButton("assets/player2_button.png", 120, 50);
-
-        player1Button.setAlignmentX(Component.CENTER_ALIGNMENT);
         player2Button.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        Widgets.addClickSound(player1Button);
         Widgets.addClickSound(player2Button);
-
-        player1Button.addActionListener(e -> {
-            parentUI.createPlayer(18, "assets/player1_icon.png");
-            parentUI.player.addEffect(new Effect("Job", 5000, Long.MAX_VALUE, 12, "money", false));
-            parentUI.player.addEffect(new Effect("Monthly Expenses", -400, Long.MAX_VALUE, 12, "money", false));
-            showGameDuration();
-        });
         player2Button.addActionListener(e -> {
             parentUI.createPlayer(27, "assets/player2_icon.png");
             parentUI.player.addEffect(new Effect("Job", 1000, Long.MAX_VALUE, 12, "money", false));
@@ -113,10 +111,21 @@ public class Menu {
             showGameDuration();
         });
 
+        // Player 1 button
+        JButton player1Button = createButton("assets/player1_button.png", 120, 50);
+        player1Button.setAlignmentX(Component.CENTER_ALIGNMENT);
+        Widgets.addClickSound(player1Button);
+        player1Button.addActionListener(e -> {
+            parentUI.createPlayer(18, "assets/player1_icon.png");
+            parentUI.player.addEffect(new Effect("Job", 5000, Long.MAX_VALUE, 12, "money", false));
+            parentUI.player.addEffect(new Effect("Monthly Expenses", -400, Long.MAX_VALUE, 12, "money", false));
+            showGameDuration();
+        });
+
         Box buttonBox = Box.createHorizontalBox();
-        buttonBox.add(player1Button);
-        buttonBox.add(Box.createRigidArea(new Dimension(20, 0)));
         buttonBox.add(player2Button);
+        buttonBox.add(Box.createRigidArea(new Dimension(20, 0)));
+        buttonBox.add(player1Button);
 
         lowerPanel.add(Box.createVerticalGlue());
         lowerPanel.add(buttonBox);
@@ -127,7 +136,7 @@ public class Menu {
     }
 
     private void setupGameDurationPanel() {
-        gameDurationPanel = createBackgroundPanel("assets/menu_background.png");
+        gameDurationPanel = createBackgroundPanel("assets/game_background.png");
         gameDurationPanel.setLayout(new BorderLayout());
 
         JPanel upperPanel = new JPanel(new BorderLayout());
@@ -147,12 +156,12 @@ public class Menu {
         backButton.addActionListener(e -> showPlayerSelect());
         upperPanel.add(backButton, BorderLayout.WEST);
 
-        JLabel titleLabel = new JLabel("SELECT GAME DURATION");
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        ImageIcon gameDurationIcon = new ImageIcon("assets/select_duration_logo.png");
+        JLabel gameDurationLabel = new JLabel(gameDurationIcon);
+        gameDurationLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         lowerPanel.add(Box.createVerticalGlue());
-        lowerPanel.add(titleLabel);
+        lowerPanel.add(gameDurationLabel);
         lowerPanel.add(Box.createRigidArea(new Dimension(0, 40)));
 
         JButton shortButton = createButton("assets/short_button.png", 120, 50);
