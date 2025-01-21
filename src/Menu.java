@@ -1,4 +1,6 @@
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import javax.swing.*;
 
 public class Menu {
@@ -16,20 +18,20 @@ public class Menu {
     }
 
     private void setupMenuPanel() {
-        menuPanel = new JPanel();
+        menuPanel = createBackgroundPanel("assets/menu_background.png");
         menuPanel.setLayout(new BoxLayout(menuPanel, BoxLayout.Y_AXIS));
 
-        JLabel titleLabel = new JLabel("MENU");
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        ImageIcon titleIcon = new ImageIcon("assets/menu_logo.png");
+        JLabel titleLabel = new JLabel(titleIcon);
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         menuPanel.add(Box.createVerticalGlue());
         menuPanel.add(titleLabel);
         menuPanel.add(Box.createRigidArea(new Dimension(0, 40)));
 
-        JButton newGameButton = new JButton("New Game");
-        JButton continueButton = new JButton("Continue");
-        JButton quitButton = new JButton("Quit");
+        JButton newGameButton = createButton("assets/new_game_button.png", 250, 50);
+        JButton continueButton = createButton("assets/continue_button.png", 250, 50);
+        JButton quitButton = createButton("assets/quit_button.png", 250, 50);
 
         newGameButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         continueButton.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -38,6 +40,10 @@ public class Menu {
         newGameButton.setFocusable(false);
         continueButton.setFocusable(false);
         quitButton.setFocusable(false);
+
+        Widgets.addClickSound(newGameButton);
+        Widgets.addClickSound(continueButton);
+        Widgets.addClickSound(quitButton);
 
         newGameButton.addActionListener(e -> showPlayerSelect());
         continueButton.addActionListener(e -> {
@@ -48,7 +54,6 @@ public class Menu {
         });
         quitButton.addActionListener(e -> System.exit(0));
 
-        menuPanel.add(Box.createVerticalGlue());
         menuPanel.add(newGameButton);
         menuPanel.add(Box.createRigidArea(new Dimension(0, 20)));
         menuPanel.add(continueButton);
@@ -58,11 +63,13 @@ public class Menu {
     }
 
     private void setupPlayerSelectPanel() {
-        playerSelectPanel = new JPanel();
+        playerSelectPanel = createBackgroundPanel("assets/menu_background.png");
         playerSelectPanel.setLayout(new BorderLayout());
 
         JPanel upperPanel = new JPanel(new BorderLayout());
+        upperPanel.setOpaque(false); // Ensure transparency
         JPanel lowerPanel = new JPanel();
+        lowerPanel.setOpaque(false); // Ensure transparency
         lowerPanel.setLayout(new BoxLayout(lowerPanel, BoxLayout.Y_AXIS));
 
         ImageIcon backIcon = new ImageIcon("assets/back_button.png");
@@ -72,6 +79,7 @@ public class Menu {
 
         backButton.setPreferredSize(new Dimension(40, 40));
         backButton.setToolTipText("Go back");
+        Widgets.addClickSound(backButton);
         backButton.addActionListener(e -> showMenu());
         upperPanel.add(backButton, BorderLayout.WEST);
 
@@ -83,11 +91,14 @@ public class Menu {
         lowerPanel.add(titleLabel);
         lowerPanel.add(Box.createRigidArea(new Dimension(0, 40)));
 
-        JButton player1Button = new JButton("Player 1 (Age: 18)");
-        JButton player2Button = new JButton("Player 2 (Age: 27)");
+        JButton player1Button = createButton("assets/player1_button.png", 120, 50);
+        JButton player2Button = createButton("assets/player2_button.png", 120, 50);
 
         player1Button.setAlignmentX(Component.CENTER_ALIGNMENT);
         player2Button.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        Widgets.addClickSound(player1Button);
+        Widgets.addClickSound(player2Button);
 
         player1Button.addActionListener(e -> {
             parentUI.createPlayer(18, "assets/player1_icon.png");
@@ -116,11 +127,13 @@ public class Menu {
     }
 
     private void setupGameDurationPanel() {
-        gameDurationPanel = new JPanel();
+        gameDurationPanel = createBackgroundPanel("assets/menu_background.png");
         gameDurationPanel.setLayout(new BorderLayout());
 
         JPanel upperPanel = new JPanel(new BorderLayout());
+        upperPanel.setOpaque(false); // Ensure transparency
         JPanel lowerPanel = new JPanel();
+        lowerPanel.setOpaque(false); // Ensure transparency
         lowerPanel.setLayout(new BoxLayout(lowerPanel, BoxLayout.Y_AXIS));
 
         ImageIcon backIcon = new ImageIcon("assets/back_button.png");
@@ -130,6 +143,7 @@ public class Menu {
 
         backButton.setPreferredSize(new Dimension(40, 40));
         backButton.setToolTipText("Go back");
+        Widgets.addClickSound(backButton);
         backButton.addActionListener(e -> showPlayerSelect());
         upperPanel.add(backButton, BorderLayout.WEST);
 
@@ -141,13 +155,17 @@ public class Menu {
         lowerPanel.add(titleLabel);
         lowerPanel.add(Box.createRigidArea(new Dimension(0, 40)));
 
-        JButton shortButton = new JButton("Short");
-        JButton mediumButton = new JButton("Normal");
-        JButton longButton = new JButton("Long");
+        JButton shortButton = createButton("assets/short_button.png", 120, 50);
+        JButton mediumButton = createButton("assets/medium_button.png", 120, 50);
+        JButton longButton = createButton("assets/long_button.png", 120, 50);
 
         shortButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         mediumButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         longButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        Widgets.addClickSound(shortButton);
+        Widgets.addClickSound(mediumButton);
+        Widgets.addClickSound(longButton);
 
         // 1 month in ms; average life expectancy => 75 years
         shortButton.addActionListener(e -> selectGameDuration(667)); // 1 year in 8 seconds; life in 10 minutes 
@@ -168,7 +186,46 @@ public class Menu {
         gameDurationPanel.add(upperPanel, BorderLayout.NORTH);
         gameDurationPanel.add(lowerPanel, BorderLayout.CENTER);
     }
+
+    private JPanel createBackgroundPanel(String imagePath) {
+        return new JPanel() {
+            private final Image backgroundImage = new ImageIcon(imagePath).getImage();
+
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+            }
+        };
+    }
     
+    private JButton createButton(String imagePath, int width, int height) {
+        ImageIcon icon = new ImageIcon(imagePath);
+        Image scaledImage = icon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
+        JButton button = new JButton(new ImageIcon(scaledImage));
+        button.setPreferredSize(new Dimension(width, height));
+        button.setMaximumSize(new Dimension(width, height));
+        button.setMinimumSize(new Dimension(width, height));
+        button.setContentAreaFilled(false);
+        button.setBorderPainted(true);
+        button.setFocusPainted(false);
+        button.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+
+        button.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                button.setBorder(BorderFactory.createLineBorder(Color.WHITE));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                button.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+            }
+        });
+
+        return button;
+    }
+
     public void selectGameDuration(int tick_duration){
         MainLoop.TIC_COUNTER = 0;
         MainLoop.TICK_DURATION_MS = tick_duration;

@@ -8,6 +8,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.function.Consumer;
 import javax.imageio.ImageIO;
+import javax.sound.sampled.*;
 import javax.swing.*;
 
 public class Widgets {
@@ -27,13 +28,34 @@ public class Widgets {
         backButton.setPreferredSize(new Dimension(50, 50));
         helpButton.setPreferredSize(new Dimension(50, 50));
 
-        backButton.addActionListener(e -> backAction.accept(e));
-        helpButton.addActionListener(e -> helpAction.accept(e));
+        backButton.addActionListener(e -> {
+            playClickSound();
+            backAction.accept(e);
+        });
+        helpButton.addActionListener(e -> {
+            playClickSound();
+            helpAction.accept(e);
+        });
 
         bottomPanel.add(backButton, BorderLayout.WEST);
         bottomPanel.add(helpButton, BorderLayout.EAST);
 
         return bottomPanel;
+    }
+
+    public static void addClickSound(JButton button) {
+        button.addActionListener(e -> playClickSound());
+    }
+
+    private static void playClickSound() {
+        try {
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("assets/mouse_click.wav").getAbsoluteFile());
+            Clip clickClip = AudioSystem.getClip();
+            clickClip.open(audioInputStream);
+            clickClip.start();
+        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+            System.err.println("Error playing click sound: " + e.getMessage());
+        }
     }
 
     public class BarPanel extends JPanel {
@@ -170,6 +192,7 @@ public class Widgets {
             JButton itemButton = new JButton(itemIcon);
             final int itemIndex = i;
             itemButton.addActionListener(e -> {
+                playClickSound();
                 int response = JOptionPane.showConfirmDialog(null, "Do you want to buy this item?", "Confirm Purchase", JOptionPane.YES_NO_OPTION);
                 if (response == JOptionPane.YES_OPTION) {
                     // Handle the purchase logic here
@@ -180,9 +203,9 @@ public class Widgets {
                     player.addItemToInventory(item);
                     player.printInventory();
 
-                    // Add happiness gain effect for 3 years (36 months)
+                    // Add linear happiness gain effect for 3 years (36 months)
                     if (category.equals("Houses")) {
-                        Effect happinessEffect = new Effect("House Happiness", 50, 36, 12, "happiness", false);
+                        Effect happinessEffect = new Effect("House Happiness", 100, 36, 12, "happiness", true);
                         player.addEffect(happinessEffect);
                     }
                 }

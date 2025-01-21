@@ -5,8 +5,10 @@ public class Effect {
     public long remainingTicks; 
     public final int activationFrequency;
     public final boolean isLinearFunc;
+    public final int totalActivations; // New variable to store total activations
 
     private boolean activated = false;
+    private int counter; // Counter to track remaining activations
 
     public Effect(String name, int change, long durationTicks, int activationFrequency, String category, boolean isLinearFunc) {
         this.name = name;
@@ -15,15 +17,17 @@ public class Effect {
         this.remainingTicks = durationTicks;
         this.activationFrequency = activationFrequency;
         this.isLinearFunc = isLinearFunc;
+        this.totalActivations = (int) (durationTicks / activationFrequency); // Calculate total activations
+        this.counter = totalActivations; // Initialize counter
     }
 
     public void applyEffect(Player player) {
         if (MainLoop.TIC_COUNTER % activationFrequency == 0) {
-            if (isLinearFunc && activated) 
-                calculateLinearChange(player);
-                
             System.out.println("Effect applied: " + name);
-            if ("happiness".equals(category)) {
+
+            if (isLinearFunc && activated) {
+                calculateLinearChange(player);
+            } else if ("happiness".equals(category)) {
                 if (change > 0 && !activated) {
                     player.happinessGain += change;
                     activated = true;
@@ -31,7 +35,6 @@ public class Effect {
                     player.happinessLoss += (change * -1);
                     activated = true;
                 }
-                player.changeHappiness(change);
             } else if ("money".equals(category)) {
                 if (change > 0 && !activated) {
                     player.moneyGain += change;
@@ -40,39 +43,34 @@ public class Effect {
                     player.moneyLoss += (change * -1);
                     activated = true;
                 }
-                player.changeMoney(change);
             }
         }
     }
 
     private void calculateLinearChange(Player player) {
-        double decrement = (double) change / (remainingTicks / activationFrequency);
+        int currentChange = change / totalActivations;
+
         if ("happiness".equals(category)) {
-            if (change > 0) {
-                player.happinessGain -= decrement;
-                if (remainingTicks <= activationFrequency) {
-                    player.happinessGain -= player.happinessGain % decrement;
+            if (counter > 0) {
+                if (change > 0) {
+                    player.happinessGain = Math.max(player.happinessGain - currentChange, 0);
+                } else {
+                    player.happinessLoss = Math.max(player.happinessLoss - currentChange * -1, 0);
                 }
-            } else {
-                player.happinessLoss -= decrement * -1;
-                if (remainingTicks <= activationFrequency) {
-                    player.happinessLoss -= player.happinessLoss % (decrement * -1);
-                }
+                counter--;
+                System.out.println("counter: " + counter);
             }
-            player.changeHappiness(change);
+            
         } else if ("money".equals(category)) {
-            if (change > 0) {
-                player.moneyGain -= decrement;
-                if (remainingTicks <= activationFrequency) {
-                    player.moneyGain -= player.moneyGain % decrement;
+            if (counter > 0) {
+                if (change > 0) {
+                    player.moneyGain = Math.max(player.moneyGain - currentChange, 0);
+                } else {
+                    player.moneyLoss = Math.max(player.moneyLoss - currentChange * -1, 0);
                 }
-            } else {
-                player.moneyLoss -= decrement * -1;
-                if (remainingTicks <= activationFrequency) {
-                    player.moneyLoss -= player.moneyLoss % (decrement * -1);
-                }
+                counter--;
+                System.out.println("counter: " + counter);
             }
-            player.changeMoney(change);
         }
     }
 
@@ -82,7 +80,27 @@ public class Effect {
         }
     }
 
-    public boolean isExpired() {
-        return remainingTicks <= 0;
+    public boolean isExpired(Player player) {
+        if (remainingTicks <= 0) {
+            removeEffect(player);
+            return true;
+        }
+        return false;
+    }
+
+    private void removeEffect(Player player) {
+        if ("happiness".equals(category)) {
+            if (change > 0) {
+                player.happinessGain = Math.max(player.happinessGain - change, 0);
+            } else {
+                player.happinessLoss = Math.max(player.happinessLoss - (change * -1), 0);
+            }
+        } else if ("money".equals(category)) {
+            if (change > 0) {
+                player.moneyGain = Math.max(player.moneyGain - change, 0);
+            } else {
+                player.moneyLoss = Math.max(player.moneyLoss - (change * -1), 0);
+            }
+        }
     }
 }

@@ -1,16 +1,21 @@
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
+import javax.sound.sampled.*;
 import javax.swing.*;
 
 public class UI extends JFrame {
     public Player player;
     public Menu menu;
     public Game game;
+    private Clip gameClip;
 
     public boolean continueGame;
 
     public UI() {
         menu = new Menu(this);
         setupWindow();
+        playBackgroundMusic("assets/game_music.wav");
         menu.showMenu();
         //  Game is being initialized in createPlayer method
     }
@@ -26,6 +31,17 @@ public class UI extends JFrame {
         Image mainImage = mainIcon.getImage().getScaledInstance(64, 64, 
         Image.SCALE_SMOOTH);
         setIconImage(mainImage);
+    }
+
+    private void playBackgroundMusic(String musicPath) {
+        try {
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(musicPath).getAbsoluteFile());
+            gameClip = AudioSystem.getClip();
+            gameClip.open(audioInputStream);
+            gameClip.loop(Clip.LOOP_CONTINUOUSLY);
+        } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
+            System.err.println("Error playing background music: " + e.getMessage());
+        }
     }
 
     public void activateGame() {
@@ -49,5 +65,4 @@ public class UI extends JFrame {
         
         game = new Game(this); // Initialize game after player is created
     }
-
 }

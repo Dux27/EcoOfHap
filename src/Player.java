@@ -15,7 +15,7 @@ public class Player {
     public int health;
     public String icon;
     public List<Item> inventory;
-    private final List<Effect> activeEffects;
+    public List<Effect> activeEffects; // Make activeEffects accessible
     private final Random random = new Random();
 
     private final UI parentUI;
@@ -48,18 +48,20 @@ public class Player {
             effect.remainingTicks--;
 
             // Remove effect if it has expired
-            if (effect.isExpired() && !effect.isLinearFunc) {
-                if (effect.change > 0) {
-                    if (effect.category.equals("money")) {
-                        moneyGain -= effect.change;
-                    } else if (effect.category.equals("happiness")) {
-                        happinessGain -= effect.change;
-                    }
-                } else {
-                    if (effect.category.equals("money")) {
-                        moneyLoss -= effect.change;
-                    } else if (effect.category.equals("happiness")) {
-                        happinessLoss -= effect.change;
+            if (effect.isExpired(this)) {
+                if (effect.isLinearFunc) {
+                    if (effect.change > 0) {
+                        if (effect.category.equals("money")) {
+                            moneyGain = Math.max(moneyGain - effect.change, 0);
+                        } else if (effect.category.equals("happiness")) {
+                            happinessGain = Math.max(happinessGain - effect.change, 0);
+                        }
+                    } else {
+                        if (effect.category.equals("money")) {
+                            moneyLoss = Math.max(moneyLoss - effect.change, 0);
+                        } else if (effect.category.equals("happiness")) {
+                            happinessLoss = Math.max(happinessLoss - effect.change, 0);
+                        }
                     }
                 }
                 System.out.println("Effect expired: " + effect.name);
@@ -68,8 +70,10 @@ public class Player {
         }
     }
 
-    public void changeHappiness(int amount) {
-        happiness += amount;
+    public void changeHappiness() {
+        happiness += happinessGain;
+        happiness -= happinessLoss;
+        if (happiness < 0) happiness = 0; // Ensure happiness does not go below 0
         parentUI.game.updateBars();
         System.out.println("Happiness: " + happiness);
         System.out.println("Happiness Gain: " + happinessGain);
@@ -77,8 +81,10 @@ public class Player {
     
     }
 
-    public void changeMoney(int amount) {
-        money += amount;
+    public void changeMoney() {
+        money += moneyGain;
+        money -= moneyLoss;
+        if (money < 0) money = 0; // Ensure money does not go below 0
         parentUI.game.updateBars();
         System.out.println("Money: " + money);
         System.out.println("Money Gain: " + moneyGain);

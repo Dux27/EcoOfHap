@@ -34,8 +34,14 @@ public class Game {
         centerMainPanel = new JPanel();
         centerMainPanel.setLayout(new BoxLayout(centerMainPanel, BoxLayout.Y_AXIS));
         JPanel bottomMainPanel = Widgets.bottomPanel(
-            e -> parentUI.activateMenu(), 
-            e -> showHelp()
+            e -> {
+                Widgets.addClickSound((JButton) e.getSource());
+                parentUI.activateMenu();
+            }, 
+            e -> {
+                Widgets.addClickSound((JButton) e.getSource());
+                showHelp();
+            }
         );
 
         ImageIcon houseIcon = new ImageIcon("assets/house_button.png");
@@ -49,6 +55,9 @@ public class Game {
 
         houseButton.setPreferredSize(new Dimension(65, 65));
         shopButton.setPreferredSize(new Dimension(65, 65));
+
+        Widgets.addClickSound(houseButton);
+        Widgets.addClickSound(shopButton);
 
         upperMaiPanel.add(houseButton, BorderLayout.WEST);
         upperMaiPanel.add(shopButton, BorderLayout.EAST);
@@ -84,8 +93,14 @@ public class Game {
         mainPanel.add(centerMainPanel, BorderLayout.CENTER);
         mainPanel.add(bottomMainPanel, BorderLayout.SOUTH);
 
-        houseButton.addActionListener(e -> showHouse());
-        shopButton.addActionListener(e -> showShop());
+        houseButton.addActionListener(e -> {
+            Widgets.addClickSound(houseButton);
+            showHouse();
+        });
+        shopButton.addActionListener(e -> {
+            Widgets.addClickSound(shopButton);
+            showShop();
+        });
     }
 
     private void setupHousePanel() {
@@ -101,7 +116,11 @@ public class Game {
         Image scaledInventoryImage = inventoryIcon.getImage().getScaledInstance(250, 40, Image.SCALE_SMOOTH);
         JButton inventoryButton = new JButton(new ImageIcon(scaledInventoryImage));
         inventoryButton.setPreferredSize(new Dimension(250, 40));
-        inventoryButton.addActionListener(e -> showInventory());
+        Widgets.addClickSound(inventoryButton);
+        inventoryButton.addActionListener(e -> {
+            Widgets.addClickSound(inventoryButton);
+            showInventory();
+        });
 
         JPanel inventoryButtonPanel = new JPanel();
         inventoryButtonPanel.add(inventoryButton);
@@ -121,8 +140,14 @@ public class Game {
 
         // BOTTOM PANEL
         JPanel bottomHousePanel = Widgets.bottomPanel(
-            e -> showGame(), 
-            e -> showHelp()
+            e -> {
+                Widgets.addClickSound((JButton) e.getSource());
+                showGame();
+            }, 
+            e -> {
+                Widgets.addClickSound((JButton) e.getSource());
+                showHelp();
+            }
         );
 
         housePanel.add(upperHousePanel, BorderLayout.NORTH);
@@ -146,6 +171,9 @@ public class Game {
         houseButton.setPreferredSize(new Dimension(250, 40));
         carButton.setPreferredSize(new Dimension(250, 40));
 
+        Widgets.addClickSound(houseButton);
+        Widgets.addClickSound(carButton);
+
         categoryButtonPanel.add(houseButton);
         categoryButtonPanel.add(carButton);
 
@@ -158,13 +186,25 @@ public class Game {
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         Widgets.updateItemsPanel(itemsShopPanel, "Houses", 10, parentUI.player);
 
-        houseButton.addActionListener(e -> Widgets.updateItemsPanel(itemsShopPanel, "Houses", 10, parentUI.player));
-        carButton.addActionListener(e -> Widgets.updateItemsPanel(itemsShopPanel, "Cars", 10, parentUI.player));
+        houseButton.addActionListener(e -> {
+            Widgets.addClickSound(houseButton);
+            Widgets.updateItemsPanel(itemsShopPanel, "Houses", 10, parentUI.player);
+        });
+        carButton.addActionListener(e -> {
+            Widgets.addClickSound(carButton);
+            Widgets.updateItemsPanel(itemsShopPanel, "Cars", 10, parentUI.player);
+        });
 
         // BOTTOM PANEL
         JPanel bottomShopPanel = Widgets.bottomPanel(
-            e -> showGame(), 
-            e -> showHelp()
+            e -> {
+                Widgets.addClickSound((JButton) e.getSource());
+                showGame();
+            }, 
+            e -> {
+                Widgets.addClickSound((JButton) e.getSource());
+                showHelp();
+            }
         );
 
         // MAIN PANEL 
@@ -194,8 +234,14 @@ public class Game {
 
         // BOTTOM PANEL
         JPanel bottomInventoryPanel = Widgets.bottomPanel(
-            e -> showHouse(), 
-            e -> showHelp()
+            e -> {
+                Widgets.addClickSound((JButton) e.getSource());
+                showHouse();
+            }, 
+            e -> {
+                Widgets.addClickSound((JButton) e.getSource());
+                showHelp();
+            }
         );
 
         inventoryPanel.add(upperInventoryPanel, BorderLayout.NORTH);

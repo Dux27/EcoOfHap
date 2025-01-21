@@ -4,6 +4,7 @@ public class MainLoop {
     public static long TIC_COUNTER = 0; 
     private static boolean tickPrinted = false; // Prevent multiple prints
     private static boolean yearUpdatePrinted = false; // Prevent multiple prints for age update
+    public static UI uiInstance; // Store the UI instance
     
     static long previousTime = System.currentTimeMillis();
 
@@ -21,6 +22,12 @@ public class MainLoop {
         if (running) 
             return; // If the game loop is already running, do not start a new thread. Preventing multiple threads from running the game loop.
         running = true;
+        uiInstance = ui; // Store the UI instance
+
+        // Create and start the Popup instance
+        Popup popup = new Popup(ui.player);
+        popup.start();
+
         new Thread(() -> {
             while (running) {
                 tick();
@@ -45,7 +52,9 @@ public class MainLoop {
                     }
                     // Update player age
                     ui.player.age++;
-                    ui.game.updateAgeLabel(); 
+                    ui.player.changeHappiness();
+                    ui.player.changeMoney();
+                    ui.game.updateAgeLabel();
 
                     // Check if the player dies
                     if (ui.player.calculateChanceToDie()) {
@@ -53,6 +62,9 @@ public class MainLoop {
                         stopGame();
                         ui.activateMenu();
                     }
+
+                    // Trigger a random event popup every year
+                    popup.showRandomEvent();
                 } else if (TIC_COUNTER % 12 != 0) {
                     yearUpdatePrinted = false;
                 }
@@ -66,6 +78,7 @@ public class MainLoop {
 
     public static void main(String[] args) {
         UI ui = new UI();
+        uiInstance = ui; // Initialize the UI instance
         ui.setVisible(true);
     }
 }
