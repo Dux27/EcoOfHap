@@ -14,6 +14,7 @@ public class Game {
     private JLabel ageLabel; 
     private Widgets.BarPanel moneyBar; 
     private Widgets.BarPanel happyBar;
+    private JLabel avatarLabel; // Add avatarLabel as a class member
 
     private final UI parentUI;
     private final Inventory inventory;
@@ -28,11 +29,14 @@ public class Game {
     }
 
     private void setupGamePanel() {
-        mainPanel = new JPanel(new BorderLayout());
+        mainPanel = createBackgroundPanel("assets/game_background2.png");
+        mainPanel.setLayout(new BorderLayout());
 
         JPanel upperMaiPanel = new JPanel(new BorderLayout());
+        upperMaiPanel.setOpaque(false); // Ensure transparency
         centerMainPanel = new JPanel();
         centerMainPanel.setLayout(new BoxLayout(centerMainPanel, BoxLayout.Y_AXIS));
+        centerMainPanel.setOpaque(false); // Ensure transparency
         JPanel bottomMainPanel = Widgets.bottomPanel(
             e -> {
                 Widgets.addClickSound((JButton) e.getSource());
@@ -63,16 +67,12 @@ public class Game {
         upperMaiPanel.add(shopButton, BorderLayout.EAST);
 
         String iconPath = parentUI.player != null ? parentUI.player.icon : "assets/game_icon.png";
-        JLabel avatarLabel = new JLabel(new ImageIcon(iconPath));
+        avatarLabel = new JLabel(new ImageIcon(iconPath));
         avatarLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         ageLabel = new JLabel("Age: " + (parentUI.player != null ? parentUI.player.age : "N/A")); // Initialize ageLabel
         ageLabel.setFont(new Font("Arial", Font.BOLD, 16));
         ageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        // Add image to centerMainPanel
-        ImageIcon centerImageIcon = new ImageIcon("assets/center_image.png");
-        JLabel centerImageLabel = new JLabel(centerImageIcon);
 
         moneyBar = new Widgets().new BarPanel(parentUI.player.moneyGain, parentUI.player.moneyLoss, "green", "red");
         happyBar = new Widgets().new BarPanel(parentUI.player.happinessGain, parentUI.player.happinessLoss, "yellow", "grey");
@@ -85,22 +85,14 @@ public class Game {
         centerMainPanel.add(moneyBar);
         centerMainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
         centerMainPanel.add(happyBar);
-        centerMainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
-        centerMainPanel.add(centerImageLabel);
         centerMainPanel.add(Box.createVerticalGlue());
 
         mainPanel.add(upperMaiPanel, BorderLayout.NORTH);
         mainPanel.add(centerMainPanel, BorderLayout.CENTER);
         mainPanel.add(bottomMainPanel, BorderLayout.SOUTH);
 
-        houseButton.addActionListener(e -> {
-            Widgets.addClickSound(houseButton);
-            showHouse();
-        });
-        shopButton.addActionListener(e -> {
-            Widgets.addClickSound(shopButton);
-            showShop();
-        });
+        houseButton.addActionListener(e -> showHouse());
+        shopButton.addActionListener(e -> showShop());
     }
 
     private void setupHousePanel() {
@@ -108,11 +100,11 @@ public class Game {
 
         // UPPER PANEL
         JPanel upperHousePanel = new JPanel(new BorderLayout());
-        ImageIcon upperHouseIcon = new ImageIcon("assets/patterns/green_pattern_1.jpg");
+        ImageIcon upperHouseIcon = new ImageIcon("assets/house_logo.png");
         JLabel upperHouseLabel = new JLabel(new ImageIcon(upperHouseIcon.getImage().getScaledInstance(500, 40, Image.SCALE_SMOOTH)));
         upperHouseLabel.setPreferredSize(new Dimension(500, 40));
 
-        ImageIcon inventoryIcon = new ImageIcon("assets/patterns/grey_pattern_1.jpg");
+        ImageIcon inventoryIcon = new ImageIcon("assets/inventory_button.png");
         Image scaledInventoryImage = inventoryIcon.getImage().getScaledInstance(250, 40, Image.SCALE_SMOOTH);
         JButton inventoryButton = new JButton(new ImageIcon(scaledInventoryImage));
         inventoryButton.setPreferredSize(new Dimension(250, 40));
@@ -160,13 +152,20 @@ public class Game {
 
         // UPPER PANEL
         JPanel upperShopPanel = new JPanel(new GridLayout(2, 1));
-        ImageIcon upperPanelIcon = new ImageIcon("assets/upper_shop_image.png");
+        ImageIcon upperPanelIcon = new ImageIcon("assets/shop_logo.png");
         JLabel upperShopLabel = new JLabel(new ImageIcon(upperPanelIcon.getImage().getScaledInstance(500, 40, Image.SCALE_SMOOTH)));
         upperShopLabel.setPreferredSize(new Dimension(upperShopLabel.getWidth(), 40));
 
         JPanel categoryButtonPanel = new JPanel(new GridLayout(1, 2));
-        JButton houseButton = new JButton("Houses");
-        JButton carButton = new JButton("Cars");
+        
+        ImageIcon houseButtonIcon = new ImageIcon("assets/houses_button.png");
+        ImageIcon carButtonIcon = new ImageIcon("assets/cars_button.png");
+
+        Image scaledHouseButtonImage = houseButtonIcon.getImage().getScaledInstance(250, 40, Image.SCALE_SMOOTH);
+        Image scaledCarButtonImage = carButtonIcon.getImage().getScaledInstance(250, 40, Image.SCALE_SMOOTH);
+
+        JButton houseButton = new JButton(new ImageIcon(scaledHouseButtonImage));
+        JButton carButton = new JButton(new ImageIcon(scaledCarButtonImage));
 
         houseButton.setPreferredSize(new Dimension(250, 40));
         carButton.setPreferredSize(new Dimension(250, 40));
@@ -219,7 +218,7 @@ public class Game {
 
         // UPPER PANEL
         JPanel upperInventoryPanel = new JPanel(new BorderLayout());
-        ImageIcon upperInventoryIcon = new ImageIcon("assets/patterns/yellow_pattern_1.jpg");
+        ImageIcon upperInventoryIcon = new ImageIcon("assets/inventory_logo.png");
         JLabel upperInventoryLabel = new JLabel(new ImageIcon(upperInventoryIcon.getImage().getScaledInstance(500, 40, Image.SCALE_SMOOTH)));
         upperInventoryLabel.setPreferredSize(new Dimension(500, 40));
 
@@ -247,6 +246,18 @@ public class Game {
         inventoryPanel.add(upperInventoryPanel, BorderLayout.NORTH);
         inventoryPanel.add(inventoryScrollPane, BorderLayout.CENTER);
         inventoryPanel.add(bottomInventoryPanel, BorderLayout.SOUTH);
+    }
+
+    private JPanel createBackgroundPanel(String imagePath) {
+        return new JPanel() {
+            private final Image backgroundImage = new ImageIcon(imagePath).getImage();
+
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+            }
+        };
     }
 
     public void showGame() {
@@ -288,6 +299,10 @@ public class Game {
 
     public void updateAgeLabel() {
         ageLabel.setText("Age: " + parentUI.player.age);
+        if (parentUI.player.age >= 27 && parentUI.player.icon.equals("assets/player1_icon.png")) {
+            parentUI.player.icon = "assets/player2_icon.png";
+            avatarLabel.setIcon(new ImageIcon(parentUI.player.icon));
+        }
     }
 
     public void updateBars() {
