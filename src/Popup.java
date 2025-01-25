@@ -138,10 +138,10 @@ public class Popup {
                     boolean investmentSuccess = random.nextBoolean();
                     if (investmentSuccess) {
                         JOptionPane.showMessageDialog(frame, "The investment went well! You gained money.");
-                        player.addEffect(new Effect("Investment Gain", 100, 12, 12, "money", true));
+                        player.addEffect(new Effect("Investment Gain", 1200, 12, 12, "money", false)); // Apply effect for one year
                     } else {
                         JOptionPane.showMessageDialog(frame, "The investment went bad. You lost money.");
-                        player.addEffect(new Effect("Investment Loss", -100, 12, 12, "money", true));
+                        player.addEffect(new Effect("Investment Loss", -1200, 12, 12, "money", false)); // Apply effect for one year
                     }
                 } else {
                     JOptionPane.showMessageDialog(frame, "You don't have enough money to invest.");
@@ -155,7 +155,8 @@ public class Popup {
                         effect.change = Math.max(effect.change - 100, 0);
                         player.moneyGain -= 1000;
                     });
-                player.addEffect(new Effect("Job Loss", -50, 36, 12, "happiness", true));
+                player.addEffect(new Effect("Job Loss", -600, 12, 12, "money", false)); // Apply effect for one year
+                player.addEffect(new Effect("Job Loss Happiness", -50, 12, 12, "happiness", false)); // Apply effect for one year
                 JOptionPane.showMessageDialog(frame, "You have been fired from your job. Your happiness decreases and your income is reduced.");
             }),
             new Event("Raise", "You got a raise! Your happiness increases for 3 years and your income is increased.", EventType.OK, Rarity.UNCOMMON, 36, () -> {
@@ -213,6 +214,47 @@ public class Popup {
             new Event("Exercise Routine", "You started a new exercise routine. Your health improves.", EventType.OK, Rarity.COMMON, 12, () -> {
                 player.health = Math.min(player.health + 10, 100);
                 JOptionPane.showMessageDialog(frame, "You started a new exercise routine. Your health improves.");
+            }),
+            new Event("Lottery Win", "You won the lottery and gained $1000!", EventType.OK, Rarity.RARE, 48, () -> {
+                player.money += 1000;
+                JOptionPane.showMessageDialog(frame, "You won the lottery and gained $1000!");
+            }),
+            new Event("Car Accident", "You were in a car accident and had to pay $500 for repairs.", EventType.OK, Rarity.UNCOMMON, 24, () -> {
+                player.money = Math.max(player.money - 500, 0);
+                JOptionPane.showMessageDialog(frame, "You were in a car accident and had to pay $500 for repairs.");
+            }),
+            new Event("New Job Offer", "You received a new job offer with a higher salary. Do you want to accept it?", EventType.YES_NO, Rarity.UNCOMMON, 36, () -> {
+                player.moneyGain += 500;
+                player.happiness += 20;
+                JOptionPane.showMessageDialog(frame, "You accepted the new job offer and your salary increased.");
+            }),
+            new Event("Vacation", "You went on a vacation and your happiness increased.", EventType.OK, Rarity.COMMON, 12, () -> {
+                player.happiness += 30;
+                JOptionPane.showMessageDialog(frame, "You went on a vacation and your happiness increased.");
+            }),
+            new Event("Medical Emergency", "You had a medical emergency and had to pay $1000 for treatment.", EventType.OK, Rarity.RARE, 48, () -> {
+                player.money = Math.max(player.money - 1000, 0);
+                JOptionPane.showMessageDialog(frame, "You had a medical emergency and had to pay $1000 for treatment.");
+            }),
+            new Event("New Friend", "You made a new friend and your happiness increased.", EventType.OK, Rarity.COMMON, 12, () -> {
+                player.happiness += 20;
+                JOptionPane.showMessageDialog(frame, "You made a new friend and your happiness increased.");
+            }),
+            new Event("House Repair", "You had to pay $300 for house repairs.", EventType.OK, Rarity.UNCOMMON, 24, () -> {
+                player.money = Math.max(player.money - 300, 0);
+                JOptionPane.showMessageDialog(frame, "You had to pay $300 for house repairs.");
+            }),
+            new Event("Gym Membership", "You bought a gym membership and your health improved.", EventType.OK, Rarity.COMMON, 12, () -> {
+                player.health = Math.min(player.health + 20, 100);
+                JOptionPane.showMessageDialog(frame, "You bought a gym membership and your health improved.");
+            }),
+            new Event("Pet Adoption", "You adopted a pet and your happiness increased.", EventType.OK, Rarity.COMMON, 12, () -> {
+                player.happiness += 30;
+                JOptionPane.showMessageDialog(frame, "You adopted a pet and your happiness increased.");
+            }),
+            new Event("Car Theft", "Your car was stolen and you lost $1000.", EventType.OK, Rarity.RARE, 48, () -> {
+                player.money = Math.max(player.money - 1000, 0);
+                JOptionPane.showMessageDialog(frame, "Your car was stolen and you lost $1000.");
             })
         );
     }

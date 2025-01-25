@@ -60,7 +60,7 @@ public class MainLoop {
                     if (ui.player.calculateChanceToDie()) {
                         System.out.println("Player has died at age: " + ui.player.age);
                         stopGame();
-                        ui.activateMenu();
+                        ui.game.showDeadScreen();
                     }
 
                     // Trigger a random event popup every year

@@ -8,6 +8,7 @@ public class Game {
     private JPanel itemsShopPanel;
     private JScrollPane scrollPane;
     private JPanel inventoryPanel;
+    private JPanel deadPanel;
 
     // Center main panel components
     private JPanel centerMainPanel;
@@ -26,6 +27,7 @@ public class Game {
         setupHousePanel();
         setupShopPanel();
         setupInventoryPanel();
+        setupDeadPanel();
     }
 
     private void setupGamePanel() {
@@ -183,15 +185,15 @@ public class Game {
         itemsShopPanel = new JPanel(new GridLayout(0, 1));
         scrollPane = new JScrollPane(itemsShopPanel);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        Widgets.updateItemsPanel(itemsShopPanel, "Houses", 10, parentUI.player);
+        Widgets.updateItemsPanel(itemsShopPanel, "Houses", 5, parentUI.player);
 
         houseButton.addActionListener(e -> {
             Widgets.addClickSound(houseButton);
-            Widgets.updateItemsPanel(itemsShopPanel, "Houses", 10, parentUI.player);
+            Widgets.updateItemsPanel(itemsShopPanel, "Houses", 5, parentUI.player);
         });
         carButton.addActionListener(e -> {
             Widgets.addClickSound(carButton);
-            Widgets.updateItemsPanel(itemsShopPanel, "Cars", 10, parentUI.player);
+            Widgets.updateItemsPanel(itemsShopPanel, "Cars", 5, parentUI.player);
         });
 
         // BOTTOM PANEL
@@ -248,6 +250,19 @@ public class Game {
         inventoryPanel.add(bottomInventoryPanel, BorderLayout.SOUTH);
     }
 
+    private void setupDeadPanel() {
+        deadPanel = new JPanel(new BorderLayout());
+
+        JLabel deadLabel = new JLabel("You have died.", SwingConstants.CENTER);
+        deadLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        deadPanel.add(deadLabel, BorderLayout.CENTER);
+
+        JButton quitButton = new JButton("Quit");
+        quitButton.setFont(new Font("Arial", Font.BOLD, 16));
+        quitButton.addActionListener(e -> System.exit(0));
+        deadPanel.add(quitButton, BorderLayout.SOUTH);
+    }
+
     private JPanel createBackgroundPanel(String imagePath) {
         return new JPanel() {
             private final Image backgroundImage = new ImageIcon(imagePath).getImage();
@@ -295,6 +310,15 @@ public class Game {
 
     public void showHelp() {
         // Help functionality
+    }
+
+    public void showDeadScreen() {
+        parentUI.getContentPane().removeAll();
+        parentUI.getContentPane().add(deadPanel);
+        parentUI.revalidate();
+        parentUI.repaint();
+        JOptionPane.showMessageDialog(parentUI, "You have died at age: " + parentUI.player.age, "Game Over", JOptionPane.INFORMATION_MESSAGE);
+        System.exit(0); // Quit the game after showing the dead screen
     }
 
     public void updateAgeLabel() {

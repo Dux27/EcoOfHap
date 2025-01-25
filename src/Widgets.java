@@ -181,6 +181,9 @@ public class Widgets {
     public static void updateItemsPanel(JPanel itemsShopPanel, String category, int quantity, Player player) {
         itemsShopPanel.removeAll();
 
+        int[] housePrices = {300000, 350000, 400000, 450000, 500000};
+        int[] carPrices = {50000, 70000, 90000, 120000, 150000};
+
         for (int i = 0; i < quantity; i++) {
             JPanel itemPanel = new JPanel(new BorderLayout());
             itemPanel.setPreferredSize(new Dimension(450, 120)); 
@@ -193,20 +196,48 @@ public class Widgets {
             final int itemIndex = i;
             itemButton.addActionListener(e -> {
                 playClickSound();
-                int response = JOptionPane.showConfirmDialog(null, "Do you want to buy this item?", "Confirm Purchase", JOptionPane.YES_NO_OPTION);
-                if (response == JOptionPane.YES_OPTION) {
-                    // Handle the purchase logic here
-                    System.out.println("Item purchased: " + imagePath);
-                    long purchaseTick = MainLoop.TIC_COUNTER % 12;
-                    purchaseTick -= MainLoop.TIC_COUNTER;
-                    Item item = new Item(category + " Item " + (itemIndex + 1), 1000, category, purchaseTick); 
-                    player.addItemToInventory(item);
-                    player.printInventory();
+                int price = calculatePrice(category, itemIndex, housePrices, carPrices);
+                if (player.money >= price) {
+                    int response = JOptionPane.showConfirmDialog(null, "Do you want to buy this item for $" + price + "?", "Confirm Purchase", JOptionPane.YES_NO_OPTION);
+                    if (response == JOptionPane.YES_OPTION) {
+                        // Handle the purchase logic here
+                        System.out.println("Item purchased: " + imagePath);
+                        long purchaseTick = MainLoop.TIC_COUNTER % 12;
+                        purchaseTick -= MainLoop.TIC_COUNTER;
+                        Item item = new Item(category + " Item " + (itemIndex + 1), price, category, purchaseTick); 
+                        player.addItemToInventory(item);
+                        player.printInventory();
 
-                    // Add linear happiness gain effect for 3 years (36 months)
-                    if (category.equals("Houses")) {
-                        Effect happinessEffect = new Effect("House Happiness", 100, 36, 12, "happiness", true);
-                        player.addEffect(happinessEffect);
+                        // Add linear happiness gain effect for 3 years (36 months)
+                        if (category.equals("Houses")) {
+                            Effect happinessEffect = new Effect("House Happiness", 100, 36, 12, "happiness", true);
+                            player.addEffect(happinessEffect);
+                        }
+                    }
+                } else {
+                    double interestRate = 0.05; // 5% interest rate
+                    int loanAmount = price - player.money;
+                    int totalRepayment = (int) (loanAmount * Math.pow(1 + interestRate, 30));
+                    int yearlyRepayment = totalRepayment / 30;
+                    int response = JOptionPane.showConfirmDialog(null, "You don't have enough money. Do you want to take a mortgage loan for 30 years with a 5% interest rate? Your yearly repayment will be $" + yearlyRepayment + ".", "Insufficient Funds", JOptionPane.YES_NO_OPTION);
+                    if (response == JOptionPane.YES_OPTION) {
+                        player.money += loanAmount;
+                        Effect creditEffect = new Effect("Mortgage Repayment", -yearlyRepayment, 30 * 12, 12, "money", true);
+                        player.addEffect(creditEffect);
+
+                        // Handle the purchase logic here
+                        System.out.println("Item purchased with mortgage: " + imagePath);
+                        long purchaseTick = MainLoop.TIC_COUNTER % 12;
+                        purchaseTick -= MainLoop.TIC_COUNTER;
+                        Item item = new Item(category + " Item " + (itemIndex + 1), price, category, purchaseTick); 
+                        player.addItemToInventory(item);
+                        player.printInventory();
+
+                        // Add linear happiness gain effect for 3 years (36 months)
+                        if (category.equals("Houses")) {
+                            Effect happinessEffect = new Effect("House Happiness", 100, 36, 12, "happiness", true);
+                            player.addEffect(happinessEffect);
+                        }
                     }
                 }
             });
@@ -217,5 +248,15 @@ public class Widgets {
 
         itemsShopPanel.revalidate();
         itemsShopPanel.repaint();
+    }
+
+    private static int calculatePrice(String category, int itemIndex, int[] housePrices, int[] carPrices) {
+        if (category.equals("Houses")) {
+            return housePrices[itemIndex % housePrices.length];
+        } else if (category.equals("Cars")) {
+            return carPrices[itemIndex % carPrices.length];
+        } else {
+            return 1000 + (itemIndex * 1000); // Default price for other items
+        }
     }
 }
