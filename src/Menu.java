@@ -106,8 +106,8 @@ public class Menu {
         Widgets.addClickSound(player2Button);
         player2Button.addActionListener(e -> {
             parentUI.createPlayer(27, "assets/player2_icon.png");
-            parentUI.player.addEffect(new Effect("Job", 1000, Long.MAX_VALUE, 12, "money", false));
-            parentUI.player.addEffect(new Effect("Monthly Expenses", -900, Long.MAX_VALUE, 12, "money", false));
+            parentUI.player.addEffect(new Effect("Job", 105600, Long.MAX_VALUE, 12, "money", false));
+            parentUI.player.addEffect(new Effect("Monthly Expenses", -50000, Long.MAX_VALUE, 12, "money", false));
             showGameDuration();
         });
 
@@ -117,8 +117,8 @@ public class Menu {
         Widgets.addClickSound(player1Button);
         player1Button.addActionListener(e -> {
             parentUI.createPlayer(18, "assets/player1_icon.png");
-            parentUI.player.addEffect(new Effect("Job", 5000, Long.MAX_VALUE, 12, "money", false));
-            parentUI.player.addEffect(new Effect("Monthly Expenses", -400, Long.MAX_VALUE, 12, "money", false));
+            parentUI.player.addEffect(new Effect("Job", 62500, Long.MAX_VALUE, 12, "money", false));
+            parentUI.player.addEffect(new Effect("Monthly Expenses", -30000, Long.MAX_VALUE, 12, "money", false));
             showGameDuration();
         });
 

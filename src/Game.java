@@ -12,6 +12,7 @@ public class Game {
 
     // Center main panel components
     private JPanel centerMainPanel;
+    private JLabel moneyLabel; 
     private JLabel ageLabel; 
     private Widgets.BarPanel moneyBar; 
     private Widgets.BarPanel happyBar;
@@ -28,6 +29,26 @@ public class Game {
         setupShopPanel();
         setupInventoryPanel();
         setupDeadPanel();
+
+        // Initialize player with a loan and house if they start at age 27
+        if (parentUI.player.age == 27) {
+            int housePrice = 500000; // Example price for house_1
+            int loanAmount = housePrice;
+            int duration = 30; // 30 years loan
+            double interestRate = 0.05; // 5% interest rate
+            int monthlyRepayment = (int) ((loanAmount * (interestRate / 12)) * Math.pow(1 + (interestRate / 12), 12 * duration) / (Math.pow(1 + (interestRate / 12), 12 * duration) - 1));
+            int yearlyRepayment = monthlyRepayment * 12;
+
+            parentUI.player.money += loanAmount;
+            Effect creditEffect = new Effect("Mortgage Repayment", -yearlyRepayment, duration * 12, 12, "money", false);
+            parentUI.player.addEffect(creditEffect);
+
+            Item house = new Item("assets/houses_item_1.png", housePrice, "Houses", MainLoop.TIC_COUNTER);
+            parentUI.player.addItemToInventory(house);
+
+            // Set the house image to house_0.png
+            updateHouseImageLabel("assets/house_1.png");
+        }
     }
 
     private void setupGamePanel() {
@@ -72,6 +93,9 @@ public class Game {
         avatarLabel = new JLabel(new ImageIcon(iconPath));
         avatarLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
+        moneyLabel = new JLabel("Money: " + (parentUI.player != null ? parentUI.player.money : "N/A") + " PLN"); // Initialize moneyLabel
+        moneyLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        moneyLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         ageLabel = new JLabel("Age: " + (parentUI.player != null ? parentUI.player.age : "N/A")); // Initialize ageLabel
         ageLabel.setFont(new Font("Arial", Font.BOLD, 16));
         ageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -83,6 +107,8 @@ public class Game {
         centerMainPanel.add(avatarLabel);
         centerMainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
         centerMainPanel.add(ageLabel);
+        centerMainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+        centerMainPanel.add(moneyLabel);
         centerMainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
         centerMainPanel.add(moneyBar);
         centerMainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
@@ -125,8 +151,10 @@ public class Game {
         // CENTER PANEL
         JPanel centerHousePanel = new JPanel();
         centerHousePanel.setLayout(new BoxLayout(centerHousePanel, BoxLayout.Y_AXIS));
-        ImageIcon houseImageIcon = new ImageIcon("assets/patterns/yellow_pattern_1.jpg");
-        JLabel houseImageLabel = new JLabel(houseImageIcon);
+
+        // Load the house image if the player has bought a house
+        JLabel houseImageLabel = new JLabel();
+        updateHouseImage(houseImageLabel);
 
         centerHousePanel.add(Box.createVerticalGlue());
         centerHousePanel.add(houseImageLabel);
@@ -147,6 +175,45 @@ public class Game {
         housePanel.add(upperHousePanel, BorderLayout.NORTH);
         housePanel.add(centerHousePanel, BorderLayout.CENTER);
         housePanel.add(bottomHousePanel, BorderLayout.SOUTH);
+    }
+
+    private void updateHouseImage(JLabel houseImageLabel) {
+        String houseImagePath = "assets/house_0.png"; // Default house image
+        int maxPrice = 0;
+        for (Item item : parentUI.player.inventory) {
+            if (item.category.equals("Houses") && item.price > maxPrice) {
+                houseImagePath = "assets/house_" + (item.name.split("_")[2]) + ".png";
+                maxPrice = item.price;
+            }
+        }
+        houseImageLabel.setIcon(new ImageIcon(houseImagePath));
+    }
+
+    public void refreshHouseImage() {
+        for (Component component : housePanel.getComponents()) {
+            if (component instanceof JPanel) {
+                for (Component innerComponent : ((JPanel) component).getComponents()) {
+                    if (innerComponent instanceof JLabel) {
+                        updateHouseImage((JLabel) innerComponent);
+                    }
+                }
+            }
+        }
+    }
+
+    private void updateHouseImageLabel(String imagePath) {
+        for (Component component : housePanel.getComponents()) {
+            if (component instanceof JPanel) {
+                for (Component innerComponent : ((JPanel) component).getComponents()) {
+                    if (innerComponent instanceof JLabel && ((JLabel) innerComponent).getIcon() != null) {
+                        String iconPath = ((ImageIcon) ((JLabel) innerComponent).getIcon()).getDescription();
+                        if (iconPath != null && iconPath.contains("house_")) {
+                            ((JLabel) innerComponent).setIcon(new ImageIcon(imagePath));
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private void setupShopPanel() {
@@ -185,15 +252,15 @@ public class Game {
         itemsShopPanel = new JPanel(new GridLayout(0, 1));
         scrollPane = new JScrollPane(itemsShopPanel);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        Widgets.updateItemsPanel(itemsShopPanel, "Houses", 5, parentUI.player);
+        Inventory.updateItemsPanel(itemsShopPanel, "Houses", 3, parentUI.player);
 
         houseButton.addActionListener(e -> {
             Widgets.addClickSound(houseButton);
-            Widgets.updateItemsPanel(itemsShopPanel, "Houses", 5, parentUI.player);
+            Inventory.updateItemsPanel(itemsShopPanel, "Houses", 3, parentUI.player);
         });
         carButton.addActionListener(e -> {
             Widgets.addClickSound(carButton);
-            Widgets.updateItemsPanel(itemsShopPanel, "Cars", 5, parentUI.player);
+            Inventory.updateItemsPanel(itemsShopPanel, "Cars", 5, parentUI.player);
         });
 
         // BOTTOM PANEL
@@ -327,6 +394,10 @@ public class Game {
             parentUI.player.icon = "assets/player2_icon.png";
             avatarLabel.setIcon(new ImageIcon(parentUI.player.icon));
         }
+    }
+
+    public void updateMoneyLabel() {
+        moneyLabel.setText("Money: " + parentUI.player.money + " PLN");
     }
 
     public void updateBars() {

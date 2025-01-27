@@ -25,8 +25,8 @@ public class Player {
         this.name = name;
         this.age = age;
         this.happiness = happiness;
-        this.happinessLoss = 10;
-        this.happinessGain = 1;
+        this.happinessLoss = 1;
+        this.happinessGain = 10;
         this.money = money;
         this.moneyLoss = 1;
         this.moneyGain = 1;
@@ -92,13 +92,26 @@ public class Player {
     }
 
     public void addItemToInventory(Item item) {
-        if (money >= item.price) {
-            inventory.add(item);
-            money -= item.price;
-            System.out.println("Item purchased: " + item.name);
+        if (!hasItem(item.name)) {
+            if (money >= item.price) {
+                inventory.add(item);
+                money -= item.price;
+                System.out.println("Item purchased: " + item.name);
+            } else {
+                System.out.println("Not enough money to purchase: " + item.name);
+            }
         } else {
-            System.out.println("Not enough money to purchase: " + item.name);
+            System.out.println("Item already exists in inventory: " + item.name);
         }
+    }
+
+    public boolean hasItem(String itemName) {
+        for (Item item : inventory) {
+            if (item.name.equals(itemName)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void printInventory() {

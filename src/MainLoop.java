@@ -47,7 +47,7 @@ public class MainLoop {
                             item.increaseValue(0.02f); // Increase value by 2%
                             System.out.println(
                                     "House values updated for year: " + ((TIC_COUNTER / 12) - (item.purchaseTick / 12))
-                                            + " - " + item.name + ": $" + item.sellPrice);
+                                            + " - " + item.name + ": " + item.sellPrice + " PLN");
                         }
                     }
                     // Update player age
@@ -55,6 +55,7 @@ public class MainLoop {
                     ui.player.changeHappiness();
                     ui.player.changeMoney();
                     ui.game.updateAgeLabel();
+                    ui.game.updateMoneyLabel();
 
                     // Check if the player dies
                     if (ui.player.calculateChanceToDie()) {
