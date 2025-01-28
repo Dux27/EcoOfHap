@@ -12,6 +12,9 @@ public class UI extends JFrame {
 
     public boolean continueGame;
 
+    /**
+     * Constructor for UI class.
+     */
     public UI() {
         menu = new Menu(this);
         setupWindow();
@@ -20,6 +23,9 @@ public class UI extends JFrame {
         //  Game is being initialized in createPlayer method
     }
 
+    /**
+     * Setup the main window.
+     */
     private void setupWindow() {
         setTitle("Economy of Happiness");
         setSize(500, 550);
@@ -33,6 +39,10 @@ public class UI extends JFrame {
         setIconImage(mainImage);
     }
 
+    /**
+     * Play background music.
+     * @param musicPath The path to the music file.
+     */
     private void playBackgroundMusic(String musicPath) {
         try {
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File(musicPath).getAbsoluteFile());
@@ -44,17 +54,28 @@ public class UI extends JFrame {
         }
     }
 
+    /**
+     * Activate the game.
+     */
     public void activateGame() {
         continueGame = true;
         game.showGame();
         MainLoop.startGame(this); // Pass the UI instance to the MainLoop
     }
 
+    /**
+     * Activate the menu.
+     */
     public void activateMenu() {
         menu.showMenu();
         MainLoop.stopGame();
     }
 
+    /**
+     * Create a new player.
+     * @param age The age of the player.
+     * @param icon The icon of the player.
+     */
     public void createPlayer(int age, String icon) {
         player = new Player(this, "Player", age, 100, 2000, 100, icon);
         System.out.println(

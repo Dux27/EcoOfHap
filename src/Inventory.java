@@ -26,18 +26,8 @@ public class Inventory {
         int[] carPrices = {5000, 15000, 32000, 74500, 148000};
 
         for (int i = 0; i < quantity; i++) {
-            String imagePath = "assets/" + category.toLowerCase() + "_item_" + (i + 1) + ".png";
-            boolean itemExists = false;
-            for (Item item : player.inventory) {
-                if (item.name.equals(imagePath)) {
-                    itemExists = true;
-                    break;
-                }
-            }
-            if (!itemExists) {
-                JPanel itemPanel = createItemPanel(category, i, housePrices, carPrices, player);
-                itemsShopPanel.add(itemPanel);
-            }
+            JPanel itemPanel = createItemPanel(category, i, housePrices, carPrices, player);
+            itemsShopPanel.add(itemPanel);
         }
 
         itemsShopPanel.revalidate();

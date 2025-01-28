@@ -13,6 +13,12 @@ import javax.swing.*;
 
 public class Widgets {
 
+    /**
+     * Create a bottom panel with back and help buttons.
+     * @param backAction The action to perform when the back button is clicked.
+     * @param helpAction The action to perform when the help button is clicked.
+     * @return The created bottom panel.
+     */
     public static JPanel bottomPanel(Consumer<ActionEvent> backAction, Consumer<ActionEvent> helpAction) { 
         JPanel bottomPanel = new JPanel(new BorderLayout());
 
@@ -43,10 +49,17 @@ public class Widgets {
         return bottomPanel;
     }
 
+    /**
+     * Add a click sound to a button.
+     * @param button The button to add the click sound to.
+     */
     public static void addClickSound(JButton button) {
         button.addActionListener(e -> playClickSound());
     }
 
+    /**
+     * Play a click sound.
+     */
     public static void playClickSound() {
         try {
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("assets/mouse_click.wav").getAbsoluteFile());
@@ -66,6 +79,13 @@ public class Widgets {
         private final BufferedImage[] negativePatterns;
         private int index = 0;
 
+        /**
+         * Constructor for BarPanel class.
+         * @param positive The positive value.
+         * @param negative The negative value.
+         * @param positivePattern The positive pattern name.
+         * @param negativePattern The negative pattern name.
+         */
         public BarPanel(int positive, int negative, String positivePattern, String negativePattern) {
             this.positive = positive;
             this.negative = negative;
@@ -84,6 +104,11 @@ public class Widgets {
             setMaximumSize(new Dimension(340, 30));
         }
 
+        /**
+         * Update the values of the bar.
+         * @param positive The new positive value.
+         * @param negative The new negative value.
+         */
         public void updateValues(int positive, int negative) {
             this.positive = positive;
             this.negative = negative;
@@ -112,6 +137,11 @@ public class Widgets {
             }
         }
 
+        /**
+         * Load patterns from files.
+         * @param patternName The pattern name.
+         * @return An array of loaded patterns.
+         */
         private BufferedImage[] loadPatterns(String patternName) {
             BufferedImage[] patterns = new BufferedImage[3];
             try {
@@ -125,6 +155,12 @@ public class Widgets {
             return patterns;
         }
 
+        /**
+         * Scale a pattern.
+         * @param pattern The pattern to scale.
+         * @param scale The scale factor.
+         * @return The scaled pattern.
+         */
         private BufferedImage scalePattern(BufferedImage pattern, int scale) {
             BufferedImage scaledPattern = new BufferedImage(pattern.getWidth() / scale, pattern.getHeight() / scale,
                     BufferedImage.TYPE_INT_ARGB);
@@ -134,6 +170,11 @@ public class Widgets {
             return scaledPattern;
         }
 
+        /**
+         * Get a random subimage from a pattern.
+         * @param pattern The pattern to get the subimage from.
+         * @return The random subimage.
+         */
         private BufferedImage getRandomSubImage(BufferedImage pattern) {
             int x = Math.max(0, random.nextInt(Math.max(1, pattern.getWidth() - getWidth())));
             int y = Math.max(0, random.nextInt(Math.max(1, pattern.getHeight() - getHeight())));
@@ -142,6 +183,14 @@ public class Widgets {
             return pattern.getSubimage(x, y, width, height);
         }
 
+        /**
+         * Draw the bar with positive and negative values.
+         * @param g2d The Graphics2D object.
+         * @param positivePaint The positive paint.
+         * @param negativePaint The negative paint.
+         * @param positive The positive value.
+         * @param negative The negative value.
+         */
         private void drawBar(Graphics2D g2d, TexturePaint positivePaint, TexturePaint negativePaint, int positive, int negative) {
             int total = positive + negative;
             int positiveWidth = (int) ((positive / (double) total) * getWidth());
@@ -178,6 +227,14 @@ public class Widgets {
         }
     }
 
+    /**
+     * Calculate the price of an item based on its category and index.
+     * @param category The category of the item.
+     * @param itemIndex The index of the item.
+     * @param housePrices The array of house prices.
+     * @param carPrices The array of car prices.
+     * @return The calculated price.
+     */
     public static int calculatePrice(String category, int itemIndex, int[] housePrices, int[] carPrices) {
         if (category.equals("Houses")) {
             return housePrices[itemIndex % housePrices.length];

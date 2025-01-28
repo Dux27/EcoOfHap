@@ -8,6 +8,9 @@ public class MainLoop {
     
     static long previousTime = System.currentTimeMillis();
 
+    /**
+     * Increment the game tick.
+     */
     private static void tick() {
         long currentTime = System.currentTimeMillis();
         long elapsedTime = currentTime - previousTime;
@@ -18,6 +21,10 @@ public class MainLoop {
         }
     }
 
+    /**
+     * Start the game loop.
+     * @param ui The UI instance.
+     */
     public static void startGame(UI ui) { 
         if (running) 
             return; // If the game loop is already running, do not start a new thread. Preventing multiple threads from running the game loop.
@@ -57,6 +64,10 @@ public class MainLoop {
                     ui.game.updateAgeLabel();
                     ui.game.updateMoneyLabel();
 
+                    // Print yearly values of money and happiness
+                    System.out.println("Yearly Money: " + ui.player.yearlyMoney);
+                    System.out.println("Yearly Happiness: " + ui.player.yearlyHappiness);
+
                     // Check if the player dies
                     if (ui.player.calculateChanceToDie()) {
                         System.out.println("Player has died at age: " + ui.player.age);
@@ -73,10 +84,17 @@ public class MainLoop {
         }).start();                             
     }
 
+    /**
+     * Stop the game loop.
+     */
     public static void stopGame() {
         running = false;
     }
 
+    /**
+     * Main method to start the game.
+     * @param args Command line arguments.
+     */
     public static void main(String[] args) {
         UI ui = new UI();
         uiInstance = ui; // Initialize the UI instance

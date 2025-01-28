@@ -20,6 +20,9 @@ public class Player {
 
     private final UI parentUI;
 
+    public List<Integer> yearlyMoney; // Store yearly money values
+    public List<Integer> yearlyHappiness; // Store yearly happiness values
+
     public Player(UI parentUI, String name, int age, int happiness, int money, int health, String icon) {
         this.parentUI = parentUI;
         this.name = name;
@@ -34,6 +37,8 @@ public class Player {
         this.icon = icon;
         this.inventory = new ArrayList<>();
         this.activeEffects = new ArrayList<>();
+        this.yearlyMoney = new ArrayList<>();
+        this.yearlyHappiness = new ArrayList<>();
     }
 
     public void addEffect(Effect effect) {
@@ -74,17 +79,18 @@ public class Player {
         happiness += happinessGain;
         happiness -= happinessLoss;
         if (happiness < 0) happiness = 0; // Ensure happiness does not go below 0
+        yearlyHappiness.add(happiness); // Store yearly happiness value
         parentUI.game.updateBars();
         System.out.println("Happiness: " + happiness);
         System.out.println("Happiness Gain: " + happinessGain);
         System.out.println("Happiness Loss: " + happinessLoss + "\n");
-    
     }
 
     public void changeMoney() {
         money += moneyGain;
         money -= moneyLoss;
         if (money < 0) money = 0; // Ensure money does not go below 0
+        yearlyMoney.add(money); // Store yearly money value
         parentUI.game.updateBars();
         System.out.println("Money: " + money);
         System.out.println("Money Gain: " + moneyGain);

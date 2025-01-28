@@ -23,6 +23,10 @@ public class Game {
     private final UI parentUI;
     private final Inventory inventory;
 
+    /**
+     * Constructor for Game class.
+     * @param parentUI The parent UI instance.
+     */
     public Game(UI parentUI) {
         this.parentUI = parentUI;
         this.inventory = new Inventory(parentUI.player);
@@ -52,6 +56,9 @@ public class Game {
         }
     }
 
+    /**
+     * Setup the main game panel.
+     */
     private void setupGamePanel() {
         mainPanel = createBackgroundPanel("assets/game_background2.png");
         mainPanel.setLayout(new BorderLayout());
@@ -124,6 +131,9 @@ public class Game {
         shopButton.addActionListener(e -> showShop());
     }
 
+    /**
+     * Setup the house panel.
+     */
     private void setupHousePanel() {
         housePanel = new JPanel(new BorderLayout());
 
@@ -180,6 +190,9 @@ public class Game {
         housePanel.add(bottomHousePanel, BorderLayout.SOUTH);
     }
 
+    /**
+     * Setup the shop panel.
+     */
     private void setupShopPanel() {
         shopPanel = new JPanel(new BorderLayout());
 
@@ -245,6 +258,9 @@ public class Game {
         shopPanel.add(bottomShopPanel, BorderLayout.SOUTH);
     }
 
+    /**
+     * Setup the inventory panel.
+     */
     private void setupInventoryPanel() {
         inventoryPanel = new JPanel(new BorderLayout());
         inventoryPanel.setPreferredSize(new Dimension(450, 120)); // Set preferred size
@@ -281,19 +297,38 @@ public class Game {
         inventoryPanel.add(bottomInventoryPanel, BorderLayout.SOUTH);
     }
 
+    /**
+     * Setup the dead screen panel.
+     */
     private void setupDeadPanel() {
-        deadPanel = new JPanel(new BorderLayout());
+        deadPanel = createBackgroundPanel("assets/game_background2.png");
+        deadPanel.setLayout(new BorderLayout());
 
         JLabel deadLabel = new JLabel("You have died.", SwingConstants.CENTER);
         deadLabel.setFont(new Font("Arial", Font.BOLD, 24));
         deadPanel.add(deadLabel, BorderLayout.CENTER);
 
-        JButton quitButton = new JButton("Quit");
-        quitButton.setFont(new Font("Arial", Font.BOLD, 16));
-        quitButton.addActionListener(e -> System.exit(0));
-        deadPanel.add(quitButton, BorderLayout.SOUTH);
+        ImageIcon quitIcon = new ImageIcon("assets/quit_button.png");
+        Image scaledQuitImage = quitIcon.getImage().getScaledInstance(250, 40, Image.SCALE_SMOOTH);
+        JButton quitButton = new JButton(new ImageIcon(scaledQuitImage));
+        quitButton.setPreferredSize(new Dimension(250, 40));
+        quitButton.addActionListener(e -> {
+            MoneyAndHappinessGraph.showGraph(parentUI.player.yearlyMoney, parentUI.player.yearlyHappiness); // Show the combined graph
+            parentUI.activateMenu(); // Return to the menu after quitting the graph
+        });
+        Widgets.addClickSound(quitButton);
+
+        JPanel quitButtonPanel = new JPanel();
+        quitButtonPanel.add(quitButton);
+
+        deadPanel.add(quitButtonPanel, BorderLayout.SOUTH);
     }
 
+    /**
+     * Create a background panel with the specified image.
+     * @param imagePath The path to the background image.
+     * @return A JPanel with the background image.
+     */
     private JPanel createBackgroundPanel(String imagePath) {
         return new JPanel() {
             private final Image backgroundImage = new ImageIcon(imagePath).getImage();
@@ -306,6 +341,9 @@ public class Game {
         };
     }
 
+    /**
+     * Show the main game panel.
+     */
     public void showGame() {
         parentUI.getContentPane().removeAll();
         parentUI.getContentPane().add(mainPanel);
@@ -314,6 +352,9 @@ public class Game {
         MainLoop.startGame(parentUI); // Pass the UI instance to the MainLoop
     }
 
+    /**
+     * Show the house panel.
+     */
     public void showHouse() {
         inventory.checkAndUpdateHouseIcon();
         parentUI.getContentPane().removeAll();
@@ -323,6 +364,9 @@ public class Game {
         MainLoop.stopGame(); // Stop the game loop
     }
 
+    /**
+     * Show the shop panel.
+     */
     public void showShop() {
         parentUI.getContentPane().removeAll();
         parentUI.getContentPane().add(shopPanel);
@@ -331,6 +375,9 @@ public class Game {
         MainLoop.stopGame(); // Stop the game loop
     }
 
+    /**
+     * Show the inventory panel.
+     */
     public void showInventory() {
         inventory.updateInventoryPanel((JPanel) ((JScrollPane) inventoryPanel.getComponent(1)).getViewport().getView());
         parentUI.getContentPane().removeAll();
@@ -340,19 +387,27 @@ public class Game {
         MainLoop.stopGame(); // Stop the game loop
     }
 
+    /**
+     * Show the help screen.
+     */
     public void showHelp() {
         // Help functionality
     }
 
+    /**
+     * Show the dead screen.
+     */
     public void showDeadScreen() {
         parentUI.getContentPane().removeAll();
         parentUI.getContentPane().add(deadPanel);
         parentUI.revalidate();
         parentUI.repaint();
         JOptionPane.showMessageDialog(parentUI, "You have died at age: " + parentUI.player.age, "Game Over", JOptionPane.INFORMATION_MESSAGE);
-        System.exit(0); // Quit the game after showing the dead screen
     }
 
+    /**
+     * Update the age label.
+     */
     public void updateAgeLabel() {
         ageLabel.setText("Age: " + parentUI.player.age);
         if (parentUI.player.age >= 27 && parentUI.player.icon.equals("assets/player1_icon.png")) {
@@ -361,16 +416,26 @@ public class Game {
         }
     }
 
+    /**
+     * Update the money label.
+     */
     public void updateMoneyLabel() {
         moneyLabel.setText("Money: " + parentUI.player.money + " PLN");
     }
 
+    /**
+     * Update the house icon.
+     * @param path The path to the new house icon.
+     */
     public static void updateHouseIcon(String path) {
         houseImageIcon = new ImageIcon(path);
         Image scaledHouseImage = houseImageIcon.getImage().getScaledInstance(500, 375, Image.SCALE_SMOOTH);
         houseImageLabel.setIcon(new ImageIcon(scaledHouseImage));
     }
 
+    /**
+     * Update the bars for money and happiness.
+     */
     public void updateBars() {
         moneyBar.updateValues(parentUI.player.moneyGain, parentUI.player.moneyLoss);
         happyBar.updateValues(parentUI.player.happinessGain, parentUI.player.happinessLoss);

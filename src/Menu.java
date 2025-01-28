@@ -10,6 +10,10 @@ public class Menu {
 
     private final UI parentUI;
 
+    /**
+     * Constructor for Menu class.
+     * @param parentUI The parent UI instance.
+     */
     public Menu(UI parentUI) {
         this.parentUI = parentUI;
         setupMenuPanel();
@@ -17,6 +21,9 @@ public class Menu {
         setupGameDurationPanel();
     }
 
+    /**
+     * Setup the main menu panel.
+     */
     private void setupMenuPanel() {
         menuPanel = createBackgroundPanel("assets/game_background.png");
         menuPanel.setLayout(new BoxLayout(menuPanel, BoxLayout.Y_AXIS));
@@ -62,6 +69,9 @@ public class Menu {
         menuPanel.add(Box.createVerticalGlue());
     }
 
+    /**
+     * Setup the player selection panel.
+     */
     private void setupPlayerSelectPanel() {
         playerSelectPanel = createBackgroundPanel("assets/game_background.png");
         playerSelectPanel.setLayout(new BorderLayout());
@@ -135,6 +145,9 @@ public class Menu {
         playerSelectPanel.add(lowerPanel, BorderLayout.CENTER);
     }
 
+    /**
+     * Setup the game duration selection panel.
+     */
     private void setupGameDurationPanel() {
         gameDurationPanel = createBackgroundPanel("assets/game_background.png");
         gameDurationPanel.setLayout(new BorderLayout());
@@ -177,7 +190,7 @@ public class Menu {
         Widgets.addClickSound(longButton);
 
         // 1 month in ms; average life expectancy => 75 years
-        shortButton.addActionListener(e -> selectGameDuration(667)); // 1 year in 8 seconds; life in 10 minutes 
+        shortButton.addActionListener(e -> selectGameDuration(100)); // 1 year in 8 seconds; life in 10 minutes 
         mediumButton.addActionListener(e -> selectGameDuration(1000)); // 1 year in 12 seconds; life in 15 minutes 
         longButton.addActionListener(e -> selectGameDuration(1750)); // 1 year in 21 seconds; life in 25 minutes
 
@@ -196,6 +209,11 @@ public class Menu {
         gameDurationPanel.add(lowerPanel, BorderLayout.CENTER);
     }
 
+    /**
+     * Create a background panel with the specified image.
+     * @param imagePath The path to the background image.
+     * @return A JPanel with the background image.
+     */
     private JPanel createBackgroundPanel(String imagePath) {
         return new JPanel() {
             private final Image backgroundImage = new ImageIcon(imagePath).getImage();
@@ -208,6 +226,13 @@ public class Menu {
         };
     }
     
+    /**
+     * Create a button with the specified image and dimensions.
+     * @param imagePath The path to the button image.
+     * @param width The width of the button.
+     * @param height The height of the button.
+     * @return A JButton with the specified image and dimensions.
+     */
     private JButton createButton(String imagePath, int width, int height) {
         ImageIcon icon = new ImageIcon(imagePath);
         Image scaledImage = icon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
@@ -235,6 +260,10 @@ public class Menu {
         return button;
     }
 
+    /**
+     * Select the game duration and start the game.
+     * @param tick_duration The duration of each tick in milliseconds.
+     */
     public void selectGameDuration(int tick_duration){
         MainLoop.TIC_COUNTER = 0;
         MainLoop.TICK_DURATION_MS = tick_duration;
@@ -242,6 +271,9 @@ public class Menu {
         parentUI.activateGame();
     }
     
+    /**
+     * Show the main menu panel.
+     */
     public void showMenu() {
         parentUI.getContentPane().removeAll();
         parentUI.getContentPane().add(menuPanel);
@@ -249,6 +281,9 @@ public class Menu {
         parentUI.repaint();
     }
 
+    /**
+     * Show the player selection panel.
+     */
     public void showPlayerSelect() {
         parentUI.getContentPane().removeAll();
         parentUI.getContentPane().add(playerSelectPanel);
@@ -256,6 +291,9 @@ public class Menu {
         parentUI.repaint();
     }
     
+    /**
+     * Show the game duration selection panel.
+     */
     public void showGameDuration() {
         parentUI.getContentPane().removeAll();
         parentUI.getContentPane().add(gameDurationPanel);

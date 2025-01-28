@@ -13,6 +13,10 @@ public class Popup {
     private boolean isPopupActive = false;
     public final Player player;
 
+    /**
+     * Constructor for Popup class.
+     * @param player The player instance.
+     */
     public Popup(Player player) {
         this.player = player; // Use the player instance from MainLoop
         this.events = createEventLibrary();
@@ -22,10 +26,16 @@ public class Popup {
         frame.setLocationRelativeTo(null);
     }
 
+    /**
+     * Start the popup logic.
+     */
     public void start() {
         scheduleNextPopup();
     }
 
+    /**
+     * Schedule the next popup event.
+     */
     private void scheduleNextPopup() {
         int delay = (1 + random.nextInt(4)) * 12 * 1000; // Random delay between 1-4 years (12 ticks per year)
         new Timer().schedule(new TimerTask() {
@@ -39,6 +49,9 @@ public class Popup {
         }, delay);
     }
 
+    /**
+     * Show a random event popup.
+     */
     public void showRandomEvent() {
         if (random.nextInt(5) != 0) { // Only proceed if the random number between 1 and 5 is 1
             return;
@@ -99,6 +112,10 @@ public class Popup {
         eventCooldowns.put(event.name, MainLoop.TIC_COUNTER + event.cooldown);
     }
 
+    /**
+     * Select a random event from the available events.
+     * @return The selected event.
+     */
     private Event selectRandomEvent() {
         List<Event> availableEvents = new ArrayList<>();
         long currentTick = MainLoop.TIC_COUNTER;
@@ -130,109 +147,114 @@ public class Popup {
         return filteredEvents.get(random.nextInt(filteredEvents.size()));
     }
 
+    /**
+     * Create a library of events.
+     * @return The list of events.
+     */
     private List<Event> createEventLibrary() {
         return Arrays.asList(
-            new Event("Risky Investment", "Your friend offered you a risky investment. Do you want to invest 2000 PLN?", EventType.YES_NO, Rarity.UNCOMMON, 48, () -> {
-                if (player.money >= 2000) {
-                    player.money -= 2000;
+            new Event("Stock Market Crash", "The stock market crashed and you lost 2000 PLN.", EventType.OK, Rarity.RARE, 48, () -> {
+                player.addEffect(new Effect("Stock Market Crash", -2000, 12, 12, "money", false)); // Apply effect for one year
+                JOptionPane.showMessageDialog(frame, "The stock market crashed and you lost 2000 PLN.");
+            }),
+            new Event("Salary Increase", "You received a salary increase of 1000 PLN per year.", EventType.OK, Rarity.UNCOMMON, 36, () -> {
+                player.addEffect(new Effect("Salary Increase", 1000, 36, 12, "money", true)); // Apply effect for three years
+                JOptionPane.showMessageDialog(frame, "You received a salary increase of 1000 PLN per year.");
+            }),
+            new Event("Unexpected Medical Bill", "You had to pay an unexpected medical bill of 500 PLN.", EventType.OK, Rarity.COMMON, 12, () -> {
+                player.addEffect(new Effect("Medical Bill", -500, 12, 12, "money", false)); // Apply effect for one year
+                JOptionPane.showMessageDialog(frame, "You had to pay an unexpected medical bill of 500 PLN.");
+            }),
+            new Event("Bonus", "You received a bonus of 1500 PLN.", EventType.OK, Rarity.UNCOMMON, 24, () -> {
+                player.addEffect(new Effect("Bonus", 1500, 12, 12, "money", false)); // Apply effect for one year
+                JOptionPane.showMessageDialog(frame, "You received a bonus of 1500 PLN.");
+            }),
+            new Event("Car Repair", "Your car needed repairs costing 800 PLN.", EventType.OK, Rarity.COMMON, 12, () -> {
+                player.addEffect(new Effect("Car Repair", -800, 12, 12, "money", false)); // Apply effect for one year
+                JOptionPane.showMessageDialog(frame, "Your car needed repairs costing 800 PLN.");
+            }),
+            new Event("Investment Opportunity", "You have an opportunity to invest 3000 PLN. Do you want to invest?", EventType.YES_NO, Rarity.UNCOMMON, 36, () -> {
+                if (player.money >= 3000) {
+                    player.money -= 3000;
                     boolean investmentSuccess = random.nextBoolean();
                     if (investmentSuccess) {
-                        JOptionPane.showMessageDialog(frame, "The investment went well! You gained money.");
-                        player.addEffect(new Effect("Investment Gain", 5000, 12, 12, "money", false)); // Apply effect for one year
+                        JOptionPane.showMessageDialog(frame, "The investment was successful! You gained 6000 PLN.");
+                        player.addEffect(new Effect("Investment Gain", 6000, 12, 12, "money", false)); // Apply effect for one year
                     } else {
-                        JOptionPane.showMessageDialog(frame, "The investment went bad. You lost money.");
-                        player.addEffect(new Effect("Investment Loss", -2000, 12, 12, "money", false)); // Apply effect for one year
+                        JOptionPane.showMessageDialog(frame, "The investment failed. You lost 3000 PLN.");
+                        player.addEffect(new Effect("Investment Loss", -3000, 12, 12, "money", false)); // Apply effect for one year
                     }
                 } else {
                     JOptionPane.showMessageDialog(frame, "You don't have enough money to invest.");
                 }
             }),
-            new Event("Fired", "You have been fired from your job. Your happiness decreases and your income is reduced.", EventType.OK, Rarity.RARE, 36, () -> {
-                player.addEffect(new Effect("Job Loss", -2400, 12, 12, "money", false)); // Apply effect for one year
-                player.addEffect(new Effect("Job Loss Happiness", -50, 12, 12, "happiness", false)); // Apply effect for one year
-                JOptionPane.showMessageDialog(frame, "You have been fired from your job. Your happiness decreases and your income is reduced.");
+            new Event("Tax Refund", "You received a tax refund of 1000 PLN.", EventType.OK, Rarity.COMMON, 12, () -> {
+                player.addEffect(new Effect("Tax Refund", 1000, 12, 12, "money", false)); // Apply effect for one year
+                JOptionPane.showMessageDialog(frame, "You received a tax refund of 1000 PLN.");
             }),
-            new Event("Raise", "You got a raise! Your happiness increases for 3 years and your income is increased.", EventType.OK, Rarity.UNCOMMON, 36, () -> {
-                player.addEffect(new Effect("Raise Income", 4000, 36, 12, "money", true)); // Apply effect for three years
-                player.addEffect(new Effect("Job Happiness", 50, 36, 12, "happiness", true)); // Apply effect for three years
+            new Event("Home Renovation", "You decided to renovate your home, costing 5000 PLN.", EventType.OK, Rarity.RARE, 48, () -> {
+                player.addEffect(new Effect("Home Renovation", -5000, 12, 12, "money", false)); // Apply effect for one year
+                JOptionPane.showMessageDialog(frame, "You decided to renovate your home, costing 5000 PLN.");
             }),
-            new Event("Found Money", "You found 200 PLN on the street!", EventType.OK, Rarity.COMMON, 12, () -> {
-                player.addEffect(new Effect("Found Money", 200, 12, 12, "money", false)); // Apply effect for one year
-                JOptionPane.showMessageDialog(frame, "You found 200 PLN on the street!");
+            new Event("Job Promotion", "You got a promotion at work! Your income increases by 2000 PLN per year.", EventType.OK, Rarity.UNCOMMON, 36, () -> {
+                player.addEffect(new Effect("Job Promotion", 2000, 36, 12, "money", true)); // Apply effect for three years
+                JOptionPane.showMessageDialog(frame, "You got a promotion at work! Your income increases by 2000 PLN per year.");
             }),
-            new Event("Lost Wallet", "You lost your wallet and 200 PLN.", EventType.OK, Rarity.COMMON, 12, () -> {
-                player.addEffect(new Effect("Lost Wallet", -200, 12, 12, "money", false)); // Apply effect for one year
-                JOptionPane.showMessageDialog(frame, "You lost your wallet and 200 PLN.");
+            new Event("Loan Payment", "You had to make a loan payment of 1000 PLN.", EventType.OK, Rarity.COMMON, 12, () -> {
+                player.addEffect(new Effect("Loan Payment", -1000, 12, 12, "money", false)); // Apply effect for one year
+                JOptionPane.showMessageDialog(frame, "You had to make a loan payment of 1000 PLN.");
             }),
-            new Event("Health Checkup", "You had a health checkup and your health improved.", EventType.OK, Rarity.COMMON, 12, () -> {
-                player.addEffect(new Effect("Health Checkup", 10, 12, 12, "health", false)); // Apply effect for one year
-                JOptionPane.showMessageDialog(frame, "You had a health checkup and your health improved.");
+            new Event("Unexpected Expense", "You had an unexpected expense of 700 PLN.", EventType.OK, Rarity.COMMON, 12, () -> {
+                player.addEffect(new Effect("Unexpected Expense", -700, 12, 12, "money", false)); // Apply effect for one year
+                JOptionPane.showMessageDialog(frame, "You had an unexpected expense of 700 PLN.");
             }),
-            new Event("Caught a Cold", "You caught a cold and your health decreased.", EventType.OK, Rarity.COMMON, 12, () -> {
-                player.addEffect(new Effect("Caught a Cold", -10, 12, 12, "health", false)); // Apply effect for one year
-                JOptionPane.showMessageDialog(frame, "You caught a cold and your health decreased.");
+            new Event("Business Opportunity", "You have a business opportunity to invest 4000 PLN. Do you want to invest?", EventType.YES_NO, Rarity.RARE, 48, () -> {
+                if (player.money >= 4000) {
+                    player.money -= 4000;
+                    boolean investmentSuccess = random.nextBoolean();
+                    if (investmentSuccess) {
+                        JOptionPane.showMessageDialog(frame, "The business was successful! You gained 8000 PLN.");
+                        player.addEffect(new Effect("Business Gain", 8000, 12, 12, "money", false)); // Apply effect for one year
+                    } else {
+                        JOptionPane.showMessageDialog(frame, "The business failed. You lost 4000 PLN.");
+                        player.addEffect(new Effect("Business Loss", -4000, 12, 12, "money", false)); // Apply effect for one year
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(frame, "You don't have enough money to invest.");
+                }
             }),
-            new Event("Birthday Gift", "You received a birthday gift of 400 PLN!", EventType.OK, Rarity.COMMON, 12, () -> {
-                player.addEffect(new Effect("Birthday Gift", 400, 12, 12, "money", false)); // Apply effect for one year
-                JOptionPane.showMessageDialog(frame, "You received a birthday gift of 400 PLN!");
+            new Event("Family Gathering", "You attended a family gathering and your happiness increased.", EventType.OK, Rarity.COMMON, 12, () -> {
+                player.addEffect(new Effect("Family Gathering", 20, 12, 12, "happiness", false)); // Apply effect for one year
+                JOptionPane.showMessageDialog(frame, "You attended a family gathering and your happiness increased.");
             }),
-            new Event("Car Repair", "Your car broke down and you had to pay 800 PLN for repairs.", EventType.OK, Rarity.COMMON, 12, () -> {
-                player.addEffect(new Effect("Car Repair", -800, 12, 12, "money", false)); // Apply effect for one year
-                JOptionPane.showMessageDialog(frame, "Your car broke down and you had to pay 800 PLN for repairs.");
+            new Event("Exercise Routine", "You started a new exercise routine and your happiness increased.", EventType.OK, Rarity.COMMON, 12, () -> {
+                player.addEffect(new Effect("Exercise Routine", 15, 12, 12, "happiness", false)); // Apply effect for one year
+                JOptionPane.showMessageDialog(frame, "You started a new exercise routine and your happiness increased.");
             }),
-            new Event("Promotion", "You got a promotion at work! Your income increases.", EventType.OK, Rarity.COMMON, 12, () -> {
-                player.addEffect(new Effect("Promotion", 2000, 12, 12, "money", false)); // Apply effect for one year
-                JOptionPane.showMessageDialog(frame, "You got a promotion at work! Your income increases.");
+            new Event("Volunteer Work", "You did some volunteer work and your happiness increased.", EventType.OK, Rarity.COMMON, 12, () -> {
+                player.addEffect(new Effect("Volunteer Work", 25, 12, 12, "happiness", false)); // Apply effect for one year
+                JOptionPane.showMessageDialog(frame, "You did some volunteer work and your happiness increased.");
             }),
-            new Event("Charity Donation", "You donated 200 PLN to charity. Your happiness increases.", EventType.OK, Rarity.COMMON, 12, () -> {
-                player.addEffect(new Effect("Charity Donation", -200, 12, 12, "money", false)); // Apply effect for one year
-                player.addEffect(new Effect("Charity Happiness", 10, 12, 12, "happiness", false)); // Apply effect for one year
-                JOptionPane.showMessageDialog(frame, "You donated 200 PLN to charity. Your happiness increases.");
+            new Event("New Hobby", "You started a new hobby and your happiness increased.", EventType.OK, Rarity.COMMON, 12, () -> {
+                player.addEffect(new Effect("New Hobby", 30, 12, 12, "happiness", false)); // Apply effect for one year
+                JOptionPane.showMessageDialog(frame, "You started a new hobby and your happiness increased.");
             }),
-            new Event("Unexpected Bill", "You received an unexpected bill of 400 PLN.", EventType.OK, Rarity.COMMON, 12, () -> {
-                player.addEffect(new Effect("Unexpected Bill", -400, 12, 12, "money", false)); // Apply effect for one year
-                JOptionPane.showMessageDialog(frame, "You received an unexpected bill of 400 PLN.");
-            }),
-            new Event("Exercise Routine", "You started a new exercise routine. Your health improves.", EventType.OK, Rarity.COMMON, 12, () -> {
-                player.addEffect(new Effect("Exercise Routine", 10, 12, 12, "health", false)); // Apply effect for one year
-                JOptionPane.showMessageDialog(frame, "You started a new exercise routine. Your health improves.");
-            }),
-            new Event("Lottery Win", "You won the lottery and gained 4000 PLN!", EventType.OK, Rarity.RARE, 48, () -> {
-                player.addEffect(new Effect("Lottery Win", 4000, 12, 12, "money", false)); // Apply effect for one year
-                JOptionPane.showMessageDialog(frame, "You won the lottery and gained 4000 PLN!");
-            }),
-            new Event("Car Accident", "You were in a car accident and had to pay 2000 PLN for repairs.", EventType.OK, Rarity.UNCOMMON, 24, () -> {
-                player.addEffect(new Effect("Car Accident", -2000, 12, 12, "money", false)); // Apply effect for one year
-                JOptionPane.showMessageDialog(frame, "You were in a car accident and had to pay 2000 PLN for repairs.");
-            }),
-            new Event("New Job Offer", "You received a new job offer with a higher salary. Do you want to accept it?", EventType.YES_NO, Rarity.UNCOMMON, 36, () -> {
-                player.addEffect(new Effect("New Job Offer", 2000, 12, 12, "money", false)); // Apply effect for one year
-                player.addEffect(new Effect("New Job Happiness", 20, 12, 12, "happiness", false)); // Apply effect for one year
-                JOptionPane.showMessageDialog(frame, "You accepted the new job offer and your salary increased.");
+            new Event("Social Event", "You attended a social event and your happiness increased.", EventType.OK, Rarity.COMMON, 12, () -> {
+                player.addEffect(new Effect("Social Event", 20, 12, 12, "happiness", false)); // Apply effect for one year
+                JOptionPane.showMessageDialog(frame, "You attended a social event and your happiness increased.");
             }),
             new Event("Vacation", "You went on a vacation and your happiness increased.", EventType.OK, Rarity.COMMON, 12, () -> {
-                player.addEffect(new Effect("Vacation Happiness", 30, 12, 12, "happiness", false)); // Apply effect for one year
+                player.addEffect(new Effect("Vacation", 40, 12, 12, "happiness", false)); // Apply effect for one year
                 JOptionPane.showMessageDialog(frame, "You went on a vacation and your happiness increased.");
             }),
-            new Event("Medical Emergency", "You had a medical emergency and had to pay 4000 PLN for treatment.", EventType.OK, Rarity.RARE, 48, () -> {
-                player.addEffect(new Effect("Medical Emergency", -4000, 12, 12, "money", false)); // Apply effect for one year
-                JOptionPane.showMessageDialog(frame, "You had a medical emergency and had to pay 4000 PLN for treatment.");
+            new Event("Charity Donation", "You donated 500 PLN to charity. Your happiness increased.", EventType.OK, Rarity.COMMON, 12, () -> {
+                player.addEffect(new Effect("Charity Donation", -500, 12, 12, "money", false)); // Apply effect for one year
+                player.addEffect(new Effect("Charity Happiness", 30, 12, 12, "happiness", false)); // Apply effect for one year
+                JOptionPane.showMessageDialog(frame, "You donated 500 PLN to charity. Your happiness increased.");
             }),
             new Event("New Friend", "You made a new friend and your happiness increased.", EventType.OK, Rarity.COMMON, 12, () -> {
-                player.addEffect(new Effect("New Friend Happiness", 20, 12, 12, "happiness", false)); // Apply effect for one year
+                player.addEffect(new Effect("New Friend", 25, 12, 12, "happiness", false)); // Apply effect for one year
                 JOptionPane.showMessageDialog(frame, "You made a new friend and your happiness increased.");
-            }),
-            new Event("House Repair", "You had to pay 1200 PLN for house repairs.", EventType.OK, Rarity.UNCOMMON, 24, () -> {
-                player.addEffect(new Effect("House Repair", -1200, 12, 12, "money", false)); // Apply effect for one year
-                JOptionPane.showMessageDialog(frame, "You had to pay 1200 PLN for house repairs.");
-            }),
-            new Event("Gym Membership", "You bought a gym membership and your health improved.", EventType.OK, Rarity.COMMON, 12, () -> {
-                player.addEffect(new Effect("Gym Membership", 20, 12, 12, "health", false)); // Apply effect for one year
-                JOptionPane.showMessageDialog(frame, "You bought a gym membership and your health improved.");
-            }),
-            new Event("Pet Adoption", "You adopted a pet and your happiness increased.", EventType.OK, Rarity.COMMON, 12, () -> {
-                player.addEffect(new Effect("Pet Adoption Happiness", 30, 24, 12, "happiness", false)); // Apply effect for one year
-                JOptionPane.showMessageDialog(frame, "You adopted a pet and your happiness increased.");
             })
         );
     }
@@ -245,6 +267,15 @@ public class Popup {
         public final long cooldown; // Cooldown in ticks
         private final Runnable effect;
 
+        /**
+         * Constructor for Event class.
+         * @param name The name of the event.
+         * @param description The description of the event.
+         * @param type The type of the event.
+         * @param rarity The rarity of the event.
+         * @param cooldown The cooldown period for the event.
+         * @param effect The effect of the event.
+         */
         public Event(String name, String description, EventType type, Rarity rarity, long cooldown, Runnable effect) {
             this.name = name;
             this.description = description;
@@ -254,6 +285,9 @@ public class Popup {
             this.effect = effect;
         }
 
+        /**
+         * Apply the effect of the event.
+         */
         public void applyEffect() {
             effect.run();
         }
