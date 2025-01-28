@@ -14,8 +14,8 @@ public class Game {
     private JPanel centerMainPanel;
     private JLabel moneyLabel; 
     private JLabel ageLabel;
-    private ImageIcon houseImageIcon;
-    private JLabel houseImageLabel;
+    private static ImageIcon houseImageIcon;
+    private static JLabel houseImageLabel;
     private Widgets.BarPanel moneyBar; 
     private Widgets.BarPanel happyBar;
     private JLabel avatarLabel; // Add avatarLabel as a class member
@@ -47,6 +47,8 @@ public class Game {
 
             Item house = new Item("assets/houses_item_1.png", housePrice, "Houses", MainLoop.TIC_COUNTER);
             parentUI.player.addItemToInventory(house);
+
+            updateHouseIcon("assets/houses_1.png");
         }
     }
 
@@ -313,6 +315,7 @@ public class Game {
     }
 
     public void showHouse() {
+        inventory.checkAndUpdateHouseIcon();
         parentUI.getContentPane().removeAll();
         parentUI.getContentPane().add(housePanel);
         parentUI.revalidate();
@@ -362,7 +365,7 @@ public class Game {
         moneyLabel.setText("Money: " + parentUI.player.money + " PLN");
     }
 
-    public void updateHouseIcon(String path) {
+    public static void updateHouseIcon(String path) {
         houseImageIcon = new ImageIcon(path);
         Image scaledHouseImage = houseImageIcon.getImage().getScaledInstance(500, 375, Image.SCALE_SMOOTH);
         houseImageLabel.setIcon(new ImageIcon(scaledHouseImage));

@@ -92,7 +92,7 @@ public class Player {
     }
 
     public void addItemToInventory(Item item) {
-        if (!hasItem(item.name)) {
+        if (!hasItem(item.category)) {
             if (money >= item.price) {
                 inventory.add(item);
                 money -= item.price;
@@ -105,9 +105,9 @@ public class Player {
         }
     }
 
-    public boolean hasItem(String itemName) {
+    public boolean hasItem(String category) {
         for (Item item : inventory) {
-            if (item.name.equals(itemName)) {
+            if (item.category.equals(category)) {
                 return true;
             }
         }
