@@ -13,7 +13,9 @@ public class Game {
     // Center main panel components
     private JPanel centerMainPanel;
     private JLabel moneyLabel; 
-    private JLabel ageLabel; 
+    private JLabel ageLabel;
+    private ImageIcon houseImageIcon;
+    private JLabel houseImageLabel;
     private Widgets.BarPanel moneyBar; 
     private Widgets.BarPanel happyBar;
     private JLabel avatarLabel; // Add avatarLabel as a class member
@@ -45,9 +47,6 @@ public class Game {
 
             Item house = new Item("assets/houses_item_1.png", housePrice, "Houses", MainLoop.TIC_COUNTER);
             parentUI.player.addItemToInventory(house);
-
-            // Set the house image to house_0.png
-            updateHouseImageLabel("assets/house_1.png");
         }
     }
 
@@ -153,8 +152,10 @@ public class Game {
         centerHousePanel.setLayout(new BoxLayout(centerHousePanel, BoxLayout.Y_AXIS));
 
         // Load the house image if the player has bought a house
-        JLabel houseImageLabel = new JLabel();
-        updateHouseImage(houseImageLabel);
+        houseImageLabel = new JLabel();
+        houseImageIcon = new ImageIcon("assets/house_0.png");
+        Image scaledHouseImage = houseImageIcon.getImage().getScaledInstance(500, 375, Image.SCALE_SMOOTH);
+        houseImageLabel.setIcon(new ImageIcon(scaledHouseImage));
 
         centerHousePanel.add(Box.createVerticalGlue());
         centerHousePanel.add(houseImageLabel);
@@ -175,45 +176,6 @@ public class Game {
         housePanel.add(upperHousePanel, BorderLayout.NORTH);
         housePanel.add(centerHousePanel, BorderLayout.CENTER);
         housePanel.add(bottomHousePanel, BorderLayout.SOUTH);
-    }
-
-    private void updateHouseImage(JLabel houseImageLabel) {
-        String houseImagePath = "assets/house_0.png"; // Default house image
-        int maxPrice = 0;
-        for (Item item : parentUI.player.inventory) {
-            if (item.category.equals("Houses") && item.price > maxPrice) {
-                houseImagePath = "assets/house_" + (item.name.split("_")[2]) + ".png";
-                maxPrice = item.price;
-            }
-        }
-        houseImageLabel.setIcon(new ImageIcon(houseImagePath));
-    }
-
-    public void refreshHouseImage() {
-        for (Component component : housePanel.getComponents()) {
-            if (component instanceof JPanel) {
-                for (Component innerComponent : ((JPanel) component).getComponents()) {
-                    if (innerComponent instanceof JLabel) {
-                        updateHouseImage((JLabel) innerComponent);
-                    }
-                }
-            }
-        }
-    }
-
-    private void updateHouseImageLabel(String imagePath) {
-        for (Component component : housePanel.getComponents()) {
-            if (component instanceof JPanel) {
-                for (Component innerComponent : ((JPanel) component).getComponents()) {
-                    if (innerComponent instanceof JLabel && ((JLabel) innerComponent).getIcon() != null) {
-                        String iconPath = ((ImageIcon) ((JLabel) innerComponent).getIcon()).getDescription();
-                        if (iconPath != null && iconPath.contains("house_")) {
-                            ((JLabel) innerComponent).setIcon(new ImageIcon(imagePath));
-                        }
-                    }
-                }
-            }
-        }
     }
 
     private void setupShopPanel() {
@@ -398,6 +360,12 @@ public class Game {
 
     public void updateMoneyLabel() {
         moneyLabel.setText("Money: " + parentUI.player.money + " PLN");
+    }
+
+    public void updateHouseIcon(String path) {
+        houseImageIcon = new ImageIcon(path);
+        Image scaledHouseImage = houseImageIcon.getImage().getScaledInstance(500, 375, Image.SCALE_SMOOTH);
+        houseImageLabel.setIcon(new ImageIcon(scaledHouseImage));
     }
 
     public void updateBars() {

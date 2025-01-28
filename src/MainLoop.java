@@ -56,6 +56,10 @@ public class MainLoop {
                     ui.player.changeMoney();
                     ui.game.updateAgeLabel();
                     ui.game.updateMoneyLabel();
+                    ui.game.updateHouseIcon(
+                        "assets/houses_1.png"
+                    );
+                    System.out.println(Inventory.extractCategoryAndNumber("assets/houses_item_1.png"));
 
                     // Check if the player dies
                     if (ui.player.calculateChanceToDie()) {

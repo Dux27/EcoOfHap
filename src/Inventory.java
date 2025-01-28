@@ -31,7 +31,7 @@ public class Inventory {
             itemPanel.setMaximumSize(new Dimension(450, 200));
             itemPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
-            String imagePath = "assets/" + category.toLowerCase() + "_item_" + (i + 1) + ".png";
+            String imagePath = "assets/" + category.toLowerCase() + "_" + (i + 1) + ".png";
             ImageIcon itemIcon = new ImageIcon(imagePath);
             Image scaledItemImage = itemIcon.getImage().getScaledInstance(480, 200, Image.SCALE_SMOOTH); // Scale the image
             JButton itemButton = new JButton(new ImageIcon(scaledItemImage));
@@ -150,5 +150,19 @@ public class Inventory {
                 }
             }
         });
+    }
+
+    public static String extractCategoryAndNumber(String itemName) {
+        String[] parts = itemName.split("/");
+        if (parts.length >= 2) {
+            String fileName = parts[parts.length - 1];
+            String[] fileParts = fileName.split("_");
+            if (fileParts.length >= 3) {
+                String category = fileParts[0];
+                String number = fileParts[2].split("\\.")[0]; // Remove the file extension
+                return "assets/" + category + "_" + number + ".png";
+            }
+        }
+        return "";
     }
 }
